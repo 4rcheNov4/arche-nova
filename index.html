@@ -1,760 +1,555 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCHE NOVA // Autonomes Digitales Kommandozentrum</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            bg: '#05070c',
-                            card: '#0a0f1d',
-                            border: '#1e293b',
-                            neon: '#00f0ff',
-                            magenta: '#ff0055',
-                            gold: '#ffb700',
-                            dim: '#64748b'
-                        }
-                    },
-                    fontFamily: {
-                        mono: ['Courier New', 'Courier', 'monospace'],
-                        sans: ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    <title>Arche Nova // Command Center</title>
     <style>
-        /* Benutzerdefiniertes Scrollbar-Design */
-        ::-webkit-scrollbar {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #030305;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Dynamischer Sternenhimmel im Hintergrund */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Hauptcontainer im vertikalen Layout */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1;
+        }
+
+        /* Cyberpunk Glas-Panels */
+        .panel {
+            background: rgba(10, 15, 20, 0.75);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        h1, h2 {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            color: #00ffcc;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Terminal & Konsole */
+        .terminal-output {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 6px;
+            padding: 10px;
+            height: 120px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            color: #aaffff;
+        }
+
+        .terminal-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            border-radius: 6px;
+            color: #00ffcc;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: #00ffcc;
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+        }
+
+        button {
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #00ffcc;
+            color: #030305;
+            box-shadow: 0 0 12px #00ffcc;
+        }
+
+        /* Schnellstart-Buttons */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Redaktions-Pult & Scrollbarer Tresor */
+        #chronik-feed {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        /* Custom Cyberpunk Scrollbar */
+        #chronik-feed::-webkit-scrollbar, .terminal-output::-webkit-scrollbar {
             width: 6px;
         }
-        ::-webkit-scrollbar-track {
-            background: #05070c;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+        #chronik-feed::-webkit-scrollbar-track, .terminal-output::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 3px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00f0ff;
+        #chronik-feed::-webkit-scrollbar-thumb, .terminal-output::-webkit-scrollbar-thumb {
+            background: #00ffcc;
+            border-radius: 3px;
+            box-shadow: 0 0 6px #00ffcc;
         }
 
-        /* Glassmorphism-Panel Stil */
-        .glass-panel {
-            background: rgba(10, 15, 29, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
-        }
-
-        .glass-panel:hover {
-            border-color: rgba(0, 240, 255, 0.4);
-        }
-
-        /* Neon-Leuchteffekte */
-        .neon-glow-cyan {
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
-        }
-        .neon-glow-magenta {
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.25);
-        }
-
-        /* Scanline CRT Effekt */
-        .scanlines {
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            );
-            background-size: 100% 4px;
-        }
-
-        /* Cyberpunk Button Stil */
-        .cyber-btn {
+        .tresor-karte {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-left: 3px solid #00ffcc;
+            border-radius: 6px;
+            padding: 12px;
             position: relative;
-            transition: all 0.2s ease-in-out;
-            clip-path: polygon(0 0, 92% 0, 100% 25%, 100% 100%, 8% 100%, 0 75%);
         }
-        .cyber-btn:active {
-            transform: scale(0.97);
+
+        .tresor-karte img {
+            max-width: 100%;
+            border-radius: 4px;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: transparent;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 2px 6px;
+        }
+        .delete-btn:hover {
+            color: #ff0000;
+            box-shadow: none;
+            background: rgba(255,0,0,0.1);
+        }
+
+        .backup-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 204, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .backup-row button {
+            font-size: 0.75rem;
+            padding: 6px 10px;
+            flex: 1;
+        }
+
+        /* Cyber-Balloon Modal (Minispiel) */
+        #game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 3, 5, 0.92);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #game-canvas {
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+            background: #000;
+            max-width: 100%;
+        }
+
+        .close-game {
+            margin-top: 15px;
+            background: #ff4444;
+            border-color: #ff4444;
+            color: #fff;
+        }
+        .close-game:hover {
+            background: #ff0000;
+            box-shadow: 0 0 12px #ff0000;
+            color: #fff;
+        }
+
+        .cyber-eye {
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 5px;
+            user-select: none;
         }
     </style>
 </head>
-<body class="bg-cyber-bg text-slate-200 font-sans min-h-screen relative overflow-x-hidden select-none">
+<body>
 
-    <!-- Animierter Sternenhimmel-Hintergrund -->
-    <canvas id="starCanvas" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas>
+    <!-- Dynamischer Canvas-Sternenhimmel -->
+    <canvas id="starfield"></canvas>
 
-    <!-- Subtiler Scanline-Effekt -->
-    <div class="fixed top-0 left-0 w-full h-full z-1 pointer-events-none scanlines opacity-30"></div>
-
-    <!-- Hauptbereich: Striktestes vertikales 1-Spalten-Layout -->
-    <main id="mainContent" class="relative z-10 max-w-xl mx-auto px-4 py-8 space-y-6 flex flex-col items-center transition-opacity duration-300">
-
-        <!-- 1. KOPFZEILE / HEADER -->
-        <header class="w-full glass-panel rounded-2xl p-6 text-center neon-glow-cyan relative overflow-hidden">
-            <div class="absolute -top-10 -left-10 w-24 h-24 bg-cyber-neon/10 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-                <span class="text-xs font-mono text-cyber-neon tracking-widest uppercase">SYS_VER // 3.2.0</span>
-                <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    AUTONOM
-                </span>
-            </div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon via-white to-cyber-magenta font-mono uppercase">
-                ARCHE NOVA
-            </h1>
-            <p class="text-xs sm:text-sm text-slate-400 mt-2 font-mono tracking-wide">
-                Digitales Kommandozentrum &amp; Autonomes Archiv
-            </p>
-        </header>
-
-        <!-- 2. BEFEHLSKONSOLE & CYBER-AUGE EASTER EGG -->
-        <section class="w-full glass-panel rounded-2xl p-5 relative">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
-                    <span class="text-xs font-mono text-slate-400 ml-2">BEFEHLS_TERMINAL</span>
-                </div>
-                <!-- Interaktiver Cyber-Auge Button -->
-                <button id="cyberEyeBtn" title="Cyber-Auge aktivieren (Spiel-Fenster öffnen)" class="relative p-2 rounded-full border border-cyber-neon/40 hover:border-cyber-neon bg-cyber-card/60 hover:bg-cyber-neon/10 transition-all group">
-                    <svg class="w-6 h-6 text-cyber-neon group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-magenta opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyber-magenta"></span>
-                    </span>
-                </button>
-            </div>
-
-            <!-- Terminal Ausgabefenster -->
-            <div id="terminalOutput" class="h-28 overflow-y-auto bg-black/60 rounded-lg p-3 font-mono text-xs text-cyber-neon/90 space-y-1.5 border border-slate-800/80">
-                <div class="text-slate-400">> System initialisiert. Lokale Sandbox aktiv.</div>
-                <div class="text-slate-400">> Tippe <span class="text-amber-300">'spiel'</span> oder klicke das Cyber-Auge für das Mini-Game.</div>
-            </div>
-
-            <!-- Terminal Eingabezeile -->
-            <form id="terminalForm" class="mt-3 flex items-center gap-2">
-                <span class="text-cyber-magenta font-mono font-bold">$</span>
-                <input type="text" id="terminalInput" placeholder="Befehl eingeben (hilfe, spiel, status, leeren)..." class="w-full bg-black/40 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-cyber-neon transition-colors" autocomplete="off">
-                <button type="submit" class="cyber-btn bg-cyber-neon/20 hover:bg-cyber-neon/30 text-cyber-neon border border-cyber-neon/50 px-3 py-1.5 text-xs font-mono rounded uppercase">
-                    SENDEN
-                </button>
-            </form>
-        </section>
-
-        <!-- 3. LOG-STREAM BEREICH (LOKALER ARCHIV-SPEICHER) -->
-        <section class="w-full space-y-4">
-            <div class="flex items-center justify-between px-1">
-                <h2 class="text-sm font-mono text-cyber-neon uppercase tracking-widest flex items-center gap-2">
-                    <svg class="w-4 h-4 text-cyber-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    LOG-STREAM // ARCHIV
-                </h2>
-                <button id="clearLogsBtn" class="text-[10px] font-mono text-slate-500 hover:text-rose-400 transition-colors">
-                    [ARCHIV LÖSCHEN]
-                </button>
-            </div>
-
-            <!-- Beitrags-Container -->
-            <div id="logStreamContainer" class="space-y-4">
-                <!-- Log-Einträge werden dynamisch aus dem localStorage gerendert -->
-            </div>
-        </section>
-
-        <!-- 4. REDAKTIONSPULT MIT LOKALEM MEDIEN-UPLOAD (BASE64) -->
-        <section class="w-full glass-panel rounded-2xl p-5 border-cyber-neon/30 space-y-4">
-            <div class="border-b border-slate-800 pb-2 flex items-center justify-between">
-                <h3 class="text-sm font-mono text-white font-bold tracking-wide uppercase flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-cyber-magenta"></span>
-                    REDAKTIONS-PULT
-                </h3>
-                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">
-                    100% LOKAL / PRIVAT
-                </span>
-            </div>
-
-            <form id="editorialForm" class="space-y-3">
-                <!-- Texteingabe -->
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">BEITRAGS-TEXT / GEDANKE</label>
-                    <textarea id="logTextInput" rows="3" placeholder="Gedanken, Analysen oder TikTok-Thematiken verfassen..." class="w-full bg-black/50 border border-slate-700 rounded-lg p-2.5 text-xs text-white font-sans focus:outline-none focus:border-cyber-neon transition-colors resize-none" required></textarea>
-                </div>
-
-                <!-- Dateiupload für GIFs/Bilder -->
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">EIGENES MEDIUM / GIF HINZUFÜGEN (LOKAL)</label>
-                    <div class="relative flex items-center justify-center border border-dashed border-slate-700 hover:border-cyber-neon/60 rounded-lg p-3 bg-black/30 transition-colors cursor-pointer group">
-                        <input type="file" id="mediaFileInput" accept="image/*,image/gif" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                        <div class="flex items-center space-x-2 text-slate-400 group-hover:text-cyber-neon transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span class="text-xs font-mono" id="mediaFileName">GIF / Bild vom Gerät wählen...</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bild-Vorschau Bereich -->
-                <div id="mediaPreviewContainer" class="hidden relative rounded-lg overflow-hidden border border-cyber-neon/40 max-h-48 bg-black/60 flex items-center justify-center p-2">
-                    <img id="mediaPreviewImg" src="" alt="Vorschau" class="max-h-40 object-contain rounded">
-                    <button type="button" id="removeMediaBtn" class="absolute top-2 right-2 bg-rose-600/80 hover:bg-rose-600 text-white p-1 rounded-full text-xs transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Absende-Button -->
-                <button type="submit" class="w-full cyber-btn py-2.5 bg-gradient-to-r from-cyber-neon/20 via-cyber-magenta/20 to-cyber-neon/20 hover:from-cyber-neon/40 hover:to-cyber-magenta/40 text-white font-mono text-xs uppercase tracking-wider border border-cyber-neon/60 rounded transition-all">
-                    LOG-EINTRAG VERANKERN
-                </button>
-            </form>
-        </section>
-
-        <!-- FUSSZEILE -->
-        <footer class="text-center py-4 text-[10px] font-mono text-slate-600 space-y-1">
-            <div>ARCHE NOVA KOMMANDOZENTRALE // LOKALER BROWSER-SPEICHER</div>
-            <div>KEINE DATENÜBERTRAGUNG AN EXTERNE SERVER</div>
-        </footer>
-
-    </main>
-
-    <!-- SAUBERES VOLLBILD SPIEL-MODAL -->
-    <div id="gameModal" class="fixed inset-0 z-50 hidden bg-cyber-bg/95 backdrop-blur-xl flex flex-col items-center justify-between p-4 sm:p-6 transition-all duration-300">
+    <div class="container">
         
-        <!-- Modal Kopfzeile -->
-        <div class="w-full max-w-xl flex items-center justify-between border-b border-cyber-neon/30 pb-3 z-10">
-            <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyber-neon animate-pulse"></span>
-                <span class="text-xs font-mono font-bold text-cyber-neon tracking-widest uppercase">CYBER-BALLON // ARCADE</span>
+        <!-- Header / Status -->
+        <div class="panel">
+            <h1>Arche Nova // Orbit</h1>
+            <p style="font-size: 0.85rem; opacity: 0.7;">System-Souveränität: Aktiv | Lokaler Tresor: Gesichert</p>
+            <div class="cyber-eye" onclick="startCyberBalloonGame()" title="Cyber-Balloon starten">👁️</div>
+        </div>
+
+        <!-- Command Console / Terminal -->
+        <div class="panel">
+            <h2>Command Console</h2>
+            <div id="terminal-out" class="terminal-output">System initialisiert... Bereit für Eingaben.<br> Tippe 'help' für Befehle.</div>
+            <div class="terminal-input-row">
+                <input type="text" id="terminal-cmd" placeholder="Befehl eingeben (z.B. help, status, play)..." onkeypress="checkEnter(event)">
+                <button onclick="executeCommand()">Exec</button>
             </div>
-            <div class="flex items-center space-x-3 sm:space-x-4">
-                <span class="text-xs font-mono text-amber-400 font-bold" id="gameScoreText">PUNKTE: 0</span>
-                <span class="text-xs font-mono text-cyber-neon font-bold" id="gameHighScoreText">REKORD: 0</span>
-                <button id="closeGameBtn" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded border border-rose-500/50 text-xs font-mono transition-colors">
-                    SCHLIESSEN [X]
-                </button>
+            <div class="btn-grid">
+                <button onclick="runQuickCmd('help')">> HELP</button>
+                <button onclick="runQuickCmd('status')">> STATUS</button>
+                <button onclick="runQuickCmd('clear')">> CLEAR</button>
+                <button onclick="startCyberBalloonGame()">> PLAY GAME</button>
             </div>
         </div>
 
-        <!-- Spiel Canvas Container -->
-        <div class="relative w-full max-w-xl flex-1 my-4 rounded-2xl border border-cyber-neon/40 overflow-hidden shadow-2xl bg-black/80 flex items-center justify-center">
-            <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+        <!-- Redaktions-Pult & Scrollbarer Tresor -->
+        <div class="panel">
+            <h2>Redaktions-Pult // Tresor</h2>
+            <textarea id="tresor-text" placeholder="Gedanken, Notizen oder Logbuch-Eintrag hier erfassen..." rows="3"></textarea>
+            <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="file" id="tresor-file" accept="image/*" style="font-size: 0.8rem; color: #aaffff; flex: 1;">
+                <button onclick="neuerEintragSpeichern()">Eintrag sichern</button>
+            </div>
+
+            <!-- Backup & Restore Werkzeuge -->
+            <div class="backup-row">
+                <button onclick="exportTresor()" title="Alle Einträge als Datei sichern">💾 Tresor sichern</button>
+                <button onclick="document.getElementById('import-file').click()" title="Gesicherte Datei laden">📂 Tresor laden</button>
+                <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importTresor(event)">
+            </div>
+
+            <!-- Scrollbarer Feed -->
+            <div id="chronik-feed">
+                <!-- Dynamische Einträge landen hier -->
+            </div>
         </div>
 
-        <!-- Touch-Steuerung & Hilfetext -->
-        <div class="w-full max-w-xl flex flex-col items-center space-y-2 z-10">
-            <div class="flex justify-center gap-6 w-full">
-                <button id="btnMoveLeft" class="flex-1 max-w-[160px] py-3 bg-slate-800/90 border border-cyber-neon/60 rounded-xl text-cyber-neon font-mono font-bold active:bg-cyber-neon/40 text-sm shadow-lg text-center select-none">
-                    &#9664; LINKS
-                </button>
-                <button id="btnMoveRight" class="flex-1 max-w-[160px] py-3 bg-slate-800/90 border border-cyber-neon/60 rounded-xl text-cyber-neon font-mono font-bold active:bg-cyber-neon/40 text-sm shadow-lg text-center select-none">
-                    RECHTS &#9654;
-                </button>
-            </div>
-            <p class="text-[11px] text-slate-400 font-mono">Pfeiltasten / A & D (Desktop) oder Touch-Buttons (Handy)</p>
-        </div>
     </div>
 
-    <!-- Benachrichtigungs-Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass-panel border-cyber-neon px-4 py-2.5 rounded-lg text-xs font-mono text-cyber-neon flex items-center space-x-2">
-        <span id="toastMsg">Meldung</span>
+    <!-- Cyber-Balloon Modal -->
+    <div id="game-modal">
+        <canvas id="game-canvas" width="360" height="480"></canvas>
+        <button class="close-game" onclick="stopCyberBalloonGame()">Spiel beenden</button>
     </div>
 
-    <!-- JAVASCRIPT: LOGIK, STERNENHIMMEL & ARCADE-GAME -->
     <script>
-        // --- SPEICHER-SCHLÜSSEL ---
-        const STORAGE_KEY = 'arche_nova_logs_v1';
-        const HIGHSCORE_KEY = 'arche_nova_highscore_v1';
-        let currentBase64Media = null;
+        /* --- 1. STERNENHIMMEL ANIMATION --- */
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
 
-        // --- DOM ELEMENTE ---
-        const starCanvas = document.getElementById('starCanvas');
-        const starCtx = starCanvas.getContext('2d');
-        const gameCanvas = document.getElementById('gameCanvas');
-        const gameCtx = gameCanvas.getContext('2d');
-
-        const mainContent = document.getElementById('mainContent');
-        const gameModal = document.getElementById('gameModal');
-        const cyberEyeBtn = document.getElementById('cyberEyeBtn');
-        const terminalOutput = document.getElementById('terminalOutput');
-        const terminalForm = document.getElementById('terminalForm');
-        const terminalInput = document.getElementById('terminalInput');
-        const logStreamContainer = document.getElementById('logStreamContainer');
-        const editorialForm = document.getElementById('editorialForm');
-        const logTextInput = document.getElementById('logTextInput');
-        const mediaFileInput = document.getElementById('mediaFileInput');
-        const mediaFileName = document.getElementById('mediaFileName');
-        const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
-        const mediaPreviewImg = document.getElementById('mediaPreviewImg');
-        const removeMediaBtn = document.getElementById('removeMediaBtn');
-        const clearLogsBtn = document.getElementById('clearLogsBtn');
-
-        const gameScoreText = document.getElementById('gameScoreText');
-        const gameHighScoreText = document.getElementById('gameHighScoreText');
-        const closeGameBtn = document.getElementById('closeGameBtn');
-        const btnMoveLeft = document.getElementById('btnMoveLeft');
-        const btnMoveRight = document.getElementById('btnMoveRight');
-
-        // --- STERNENHIMMEL-ENGINE ---
-        let bgWidth, bgHeight;
-        let stars = [];
-        const STAR_COUNT = 85;
-
-        function resizeStarCanvas() {
-            bgWidth = window.innerWidth;
-            bgHeight = window.innerHeight;
-            starCanvas.width = bgWidth;
-            starCanvas.height = bgHeight;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        function initStars() {
-            stars = [];
-            for (let i = 0; i < STAR_COUNT; i++) {
-                stars.push({
-                    x: Math.random() * bgWidth,
-                    y: Math.random() * bgHeight,
-                    radius: Math.random() * 1.5 + 0.5,
-                    alpha: Math.random(),
-                    speed: Math.random() * 0.5 + 0.2
-                });
-            }
-        }
+        const stars = Array.from({ length: 70 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 1.5,
+            speed: Math.random() * 0.3 + 0.1
+        }));
 
-        function animateBackground() {
-            starCtx.fillStyle = '#05070c';
-            starCtx.fillRect(0, 0, bgWidth, bgHeight);
-
-            starCtx.fillStyle = '#ffffff';
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ffcc';
             stars.forEach(star => {
-                star.y += star.speed;
-                if (star.y > bgHeight) {
-                    star.y = 0;
-                    star.x = Math.random() * bgWidth;
-                }
-                starCtx.globalAlpha = star.alpha;
-                starCtx.beginPath();
-                starCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                starCtx.fill();
+                star.y -= star.speed;
+                if (star.y < 0) star.y = canvas.height;
+                ctx.fillRect(star.x, star.y, star.size, star.size);
             });
-            starCtx.globalAlpha = 1.0;
-            requestAnimationFrame(animateBackground);
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        /* --- 2. TERMINAL LOGIK --- */
+        function logToTerminal(text) {
+            const out = document.getElementById('terminal-out');
+            out.innerHTML += `<br>> ${text}`;
+            out.scrollTop = out.scrollHeight;
         }
 
-        // --- MINI-GAME ENGINE ---
-        let gWidth, gHeight;
-        let gameActive = false;
-        let score = 0;
-        let highscore = parseInt(localStorage.getItem(HIGHSCORE_KEY) || '0', 10);
-        let balloon = { x: 0, y: 0, radius: 18, speed: 6 };
-        let obstacles = [];
-        let collectibles = [];
-        let keys = { left: false, right: false };
-        let gameAnimationId = null;
-
-        function resizeGameCanvas() {
-            if (!gameCanvas.parentElement) return;
-            gWidth = gameCanvas.parentElement.clientWidth;
-            gHeight = gameCanvas.parentElement.clientHeight;
-            gameCanvas.width = gWidth;
-            gameCanvas.height = gHeight;
-            if (balloon.x === 0) {
-                balloon.x = gWidth / 2;
-                balloon.y = gHeight - 80;
-            }
+        function checkEnter(e) {
+            if (e.key === 'Enter') executeCommand();
         }
 
-        function startMiniGame() {
-            gameActive = true;
-            score = 0;
-            obstacles = [];
-            collectibles = [];
-            
-            gameModal.classList.remove('hidden');
-            mainContent.classList.add('opacity-10');
-
-            resizeGameCanvas();
-            balloon.x = gWidth / 2;
-            balloon.y = gHeight - 80;
-
-            gameScoreText.innerText = `PUNKTE: ${score}`;
-            gameHighScoreText.innerText = `REKORD: ${highscore}`;
-            
-            appendTerminal('> SPIEL-FENSTER GEÖFFNET: Cyber-Ballon gestartet!');
-            showToast('Cyber-Ballon gestartet!');
-
-            if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
-            runGameLoop();
+        function runQuickCmd(cmd) {
+            document.getElementById('terminal-cmd').value = cmd;
+            executeCommand();
         }
 
-        function stopMiniGame() {
-            gameActive = false;
-            gameModal.classList.add('hidden');
-            mainContent.classList.remove('opacity-10');
-            if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
-            appendTerminal('> SPIEL-FENSTER GESCHLOSSEN.');
-        }
+        function executeCommand() {
+            const input = document.getElementById('terminal-cmd');
+            const val = input.value.trim().toLowerCase();
+            if (!val) return;
 
-        function updateMiniGame() {
-            if (keys.left && balloon.x - balloon.radius > 10) {
-                balloon.x -= balloon.speed;
-            }
-            if (keys.right && balloon.x + balloon.radius < gWidth - 10) {
-                balloon.x += balloon.speed;
-            }
+            logToTerminal(val);
 
-            // Hindernisse erzeugen (Roter Algorithmen-Müll)
-            if (Math.random() < 0.04) {
-                obstacles.push({
-                    x: Math.random() * (gWidth - 40) + 20,
-                    y: -20,
-                    size: Math.random() * 18 + 14,
-                    speed: Math.random() * 2 + 2.5
-                });
-            }
-
-            // Sammelobjekte erzeugen (Goldene Sterne)
-            if (Math.random() < 0.025) {
-                collectibles.push({
-                    x: Math.random() * (gWidth - 40) + 20,
-                    y: -20,
-                    radius: 8,
-                    speed: Math.random() * 1.5 + 2
-                });
-            }
-
-            // Hindernisse aktualisieren
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                let obs = obstacles[i];
-                obs.y += obs.speed;
-
-                let dist = Math.hypot(balloon.x - obs.x, balloon.y - obs.y);
-                if (dist < balloon.radius + obs.size / 2) {
-                    if (score > highscore) {
-                        highscore = score;
-                        localStorage.setItem(HIGHSCORE_KEY, highscore.toString());
-                    }
-                    showToast(`Kollision! Punkte: ${score} (Rekord: ${highscore})`);
-                    appendTerminal(`> GAME OVER! Endpunktzahl: ${score} | Rekord: ${highscore}`);
-                    stopMiniGame();
-                    return;
-                }
-
-                if (obs.y > gHeight + 50) obstacles.splice(i, 1);
-            }
-
-            // Sterne aktualisieren
-            for (let i = collectibles.length - 1; i >= 0; i--) {
-                let c = collectibles[i];
-                c.y += c.speed;
-
-                let dist = Math.hypot(balloon.x - c.x, balloon.y - c.y);
-                if (dist < balloon.radius + c.radius) {
-                    score += 10;
-                    if (score > highscore) {
-                        highscore = score;
-                        localStorage.setItem(HIGHSCORE_KEY, highscore.toString());
-                    }
-                    gameScoreText.innerText = `PUNKTE: ${score}`;
-                    gameHighScoreText.innerText = `REKORD: ${highscore}`;
-                    collectibles.splice(i, 1);
-                    continue;
-                }
-
-                if (c.y > gHeight + 50) collectibles.splice(i, 1);
-            }
-        }
-
-        function renderMiniGame() {
-            gameCtx.fillStyle = '#0a0f1d';
-            gameCtx.fillRect(0, 0, gWidth, gHeight);
-
-            // Raster-Linien
-            gameCtx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
-            gameCtx.lineWidth = 1;
-            for (let x = 0; x < gWidth; x += 30) {
-                gameCtx.beginPath();
-                gameCtx.moveTo(x, 0);
-                gameCtx.lineTo(x, gHeight);
-                gameCtx.stroke();
-            }
-            for (let y = 0; y < gHeight; y += 30) {
-                gameCtx.beginPath();
-                gameCtx.moveTo(0, y);
-                gameCtx.lineTo(gWidth, y);
-                gameCtx.stroke();
-            }
-
-            // Ballon / Cyber-Schiff
-            gameCtx.save();
-            gameCtx.shadowBlur = 15;
-            gameCtx.shadowColor = '#00f0ff';
-            gameCtx.fillStyle = '#00f0ff';
-            gameCtx.beginPath();
-            gameCtx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
-            gameCtx.fill();
-            // Gondel
-            gameCtx.fillStyle = '#ff0055';
-            gameCtx.fillRect(balloon.x - 4, balloon.y + balloon.radius + 2, 8, 6);
-            gameCtx.restore();
-
-            // Hindernisse (Rote Quadrate)
-            gameCtx.save();
-            gameCtx.fillStyle = '#ff0055';
-            gameCtx.shadowBlur = 8;
-            gameCtx.shadowColor = '#ff0055';
-            obstacles.forEach(obs => {
-                gameCtx.fillRect(obs.x - obs.size / 2, obs.y - obs.size / 2, obs.size, obs.size);
-            });
-            gameCtx.restore();
-
-            // Sterne (Goldene Kreise)
-            gameCtx.save();
-            gameCtx.fillStyle = '#ffb700';
-            gameCtx.shadowBlur = 10;
-            gameCtx.shadowColor = '#ffb700';
-            collectibles.forEach(c => {
-                gameCtx.beginPath();
-                gameCtx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
-                gameCtx.fill();
-            });
-            gameCtx.restore();
-        }
-
-        function runGameLoop() {
-            if (!gameActive) return;
-            updateMiniGame();
-            renderMiniGame();
-            gameAnimationId = requestAnimationFrame(runGameLoop);
-        }
-
-        // Tastatur- & Touch-Steuerung
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
-            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
-            if (e.key === 'Escape' && gameActive) stopMiniGame();
-        });
-        window.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
-            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-        });
-
-        // Touch-Buttons Steuerung
-        btnMoveLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.left = true; });
-        btnMoveLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys.left = false; });
-        btnMoveRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.right = true; });
-        btnMoveRight.addEventListener('touchend', (e) => { e.preventDefault(); keys.right = false; });
-        btnMoveLeft.addEventListener('mousedown', () => keys.left = true);
-        btnMoveLeft.addEventListener('mouseup', () => keys.left = false);
-        btnMoveRight.addEventListener('mousedown', () => keys.right = true);
-        btnMoveRight.addEventListener('mouseup', () => keys.right = false);
-
-        cyberEyeBtn.addEventListener('click', startMiniGame);
-        closeGameBtn.addEventListener('click', stopMiniGame);
-
-        // --- TERMINAL LOGIK ---
-        function appendTerminal(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            terminalOutput.appendChild(div);
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;
-        }
-
-        terminalForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const cmd = terminalInput.value.trim().toLowerCase();
-            if (!cmd) return;
-
-            appendTerminal(`$ ${cmd}`);
-            terminalInput.value = '';
-
-            if (cmd === 'hilfe' || cmd === 'help') {
-                appendTerminal('> Befehle: spiel, leeren, status, info');
-            } else if (cmd === 'spiel' || cmd === 'play') {
-                startMiniGame();
-            } else if (cmd === 'leeren' || cmd === 'clear') {
-                terminalOutput.innerHTML = '';
-            } else if (cmd === 'status') {
-                appendTerminal('> STATUS: Arche Nova System 100% online.');
-                appendTerminal(`> LOKALE EINTRÄGE: ${getLogs().length}`);
-            } else if (cmd === 'info' || cmd === 'about') {
-                appendTerminal('> ARCHE NOVA: Autonomes Territorium gegen Algorithmen.');
+            if (val === 'help') {
+                logToTerminal('Verfügbare Befehle: help, status, clear, play');
+            } else if (val === 'status') {
+                logToTerminal('Arche Nova Core: Online. Lokaler Speicher aktiv.');
+            } else if (val === 'clear') {
+                document.getElementById('terminal-out').innerHTML = 'Terminal bereinigt.';
+            } else if (val === 'play') {
+                startCyberBalloonGame();
             } else {
-                appendTerminal(`> Unbekannter Befehl: '${cmd}'. Tippe 'hilfe'.`);
+                logToTerminal(`Unbekannter Befehl: '${val}'. Tippe 'help'.`);
             }
-        });
-
-        // --- LOKALER SPEICHER / LOG-SYSTEM ---
-        function getLogs() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch (e) {
-                return [];
-            }
+            input.value = '';
         }
 
-        function saveLogs(logs) {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-            } catch (e) {
-                showToast('Fehler: Lokaler Speicher voll!');
-            }
-        }
+        /* --- 3. SCROLLBARER TRESOR & BACKUP LOGIK --- */
+        function renderChronik() {
+            const feed = document.getElementById('chronik-feed');
+            if (!feed) return;
 
-        function renderLogs() {
-            const logs = getLogs();
-            logStreamContainer.innerHTML = '';
+            const eintrgae = JSON.parse(localStorage.getItem('arche_nova_chronik')) || [];
+            feed.innerHTML = '';
 
-            if (logs.length === 0) {
-                logStreamContainer.innerHTML = `
-                    <div class="glass-panel rounded-xl p-6 text-center text-xs font-mono text-slate-500">
-                        [KEINE DOKUMENTE VERANKERT. NUTZE DAS REDAKTIONS-PULT UNTEN]
-                    </div>
-                `;
+            if (eintrgae.length === 0) {
+                feed.innerHTML = '<p style="opacity: 0.4; text-align: center; font-size: 0.85rem; padding: 10px;">Der Tresor ist noch leer...</p>';
                 return;
             }
 
-            logs.forEach((log) => {
-                const card = document.createElement('article');
-                card.className = "glass-panel rounded-xl p-4 space-y-3 relative overflow-hidden transition-all";
-                
-                let mediaHTML = '';
-                if (log.mediaData) {
-                    mediaHTML = `
-                        <div class="rounded-lg overflow-hidden border border-slate-800 bg-black/60 mt-2 max-h-80 flex items-center justify-center">
-                            <img src="${log.mediaData}" alt="Verankertes Medium" class="w-full h-auto max-h-80 object-contain">
-                        </div>
-                    `;
+            eintrgae.slice().reverse().forEach((eintrag, index) => {
+                const originalIndex = eintrgae.length - 1 - index;
+                const item = document.createElement('div');
+                item.className = 'tresor-karte';
+
+                let medienHTML = '';
+                if (eintrag.media) {
+                    medienHTML = `<img src="${eintrag.media}" alt="Gespeichertes Medium">`;
                 }
 
-                card.innerHTML = `
-                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 border-b border-slate-800/80 pb-2">
-                        <span class="text-cyber-neon font-bold">ID: #${log.id}</span>
-                        <span>${log.timestamp}</span>
-                    </div>
-                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans whitespace-pre-wrap">${escapeHTML(log.text)}</p>
-                    ${mediaHTML}
-                    <div class="flex justify-end pt-1">
-                        <button onclick="deleteLog('${log.id}')" class="text-[10px] font-mono text-slate-500 hover:text-rose-400 transition-colors">
-                            [LÖSCHEN]
-                        </button>
-                    </div>
+                item.innerHTML = `
+                    <div style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 6px;">${eintrag.zeitstempel}</div>
+                    <div style="word-break: break-word; font-size: 0.9rem;">${eintrag.text.replace(/\n/g, '<br>')}</div>
+                    ${medienHTML}
+                    <button class="delete-btn" onclick="loescheEintrag(${originalIndex})" title="Eintrag löschen">✕</button>
                 `;
-                logStreamContainer.appendChild(card);
+                feed.appendChild(item);
             });
         }
 
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
+        function neuerEintragSpeichern() {
+            const textArea = document.getElementById('tresor-text');
+            const fileInput = document.getElementById('tresor-file');
+            const textVal = textArea.value.trim();
+
+            if (!textVal && fileInput.files.length === 0) return;
+
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    speichereInStorage(textVal, e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                speichereInStorage(textVal, null);
+            }
         }
 
-        // --- LOKALER MEDIEN-READER (BASE64) ---
-        mediaFileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
+        function speichereInStorage(text, mediaBase64) {
+            const eintrgae = JSON.parse(localStorage.getItem('arche_nova_chronik')) || [];
+            const neuerEintrag = {
+                text: text,
+                media: mediaBase64,
+                zeitstempel: new Date().toLocaleString('de-DE')
+            };
+
+            eintrgae.push(neuerEintrag);
+            localStorage.setItem('arche_nova_chronik', JSON.stringify(eintrgae));
+
+            document.getElementById('tresor-text').value = '';
+            document.getElementById('tresor-file').value = '';
+            renderChronik();
+        }
+
+        function loescheEintrag(index) {
+            let eintrgae = JSON.parse(localStorage.getItem('arche_nova_chronik')) || [];
+            eintrgae.splice(index, 1);
+            localStorage.setItem('arche_nova_chronik', JSON.stringify(eintrgae));
+            renderChronik();
+        }
+
+        /* --- BACKUP & RESTORE FUNKTIONEN --- */
+        function exportTresor() {
+            const data = localStorage.getItem('arche_nova_chronik');
+            if (!data || JSON.parse(data).length === 0) {
+                alert('Der Tresor ist leer, es gibt nichts zu sichern.');
+                return;
+            }
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `arche_nova_tresor_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importTresor(event) {
+            const file = event.target.files[0];
             if (!file) return;
 
-            if (file.size > 8 * 1024 * 1024) {
-                showToast('Datei zu groß! Max. 8MB erlaubt.');
-                return;
-            }
-
             const reader = new FileReader();
-            reader.onload = function (evt) {
-                currentBase64Media = evt.target.result;
-                mediaPreviewImg.src = currentBase64Media;
-                mediaPreviewContainer.classList.remove('hidden');
-                mediaFileName.innerText = file.name;
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (Array.isArray(parsed)) {
+                        localStorage.setItem('arche_nova_chronik', JSON.stringify(parsed));
+                        renderChronik();
+                        alert('Tresor erfolgreich wiederhergestellt!');
+                    } else {
+                        alert('Ungültiges Backup-Format.');
+                    }
+                } catch (err) {
+                    alert('Fehler beim Einlesen der Datei.');
+                }
             };
-            reader.readAsDataURL(file);
-        });
-
-        removeMediaBtn.addEventListener('click', () => {
-            currentBase64Media = null;
-            mediaFileInput.value = '';
-            mediaPreviewContainer.classList.add('hidden');
-            mediaFileName.innerText = 'GIF / Bild vom Gerät wählen...';
-        });
-
-        editorialForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const text = logTextInput.value.trim();
-            if (!text && !currentBase64Media) {
-                showToast('Bitte Text oder Medium hinzufügen!');
-                return;
-            }
-
-            const newLog = {
-                id: Date.now().toString().slice(-6),
-                text: text,
-                mediaData: currentBase64Media,
-                timestamp: new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })
-            };
-
-            const logs = getLogs();
-            logs.unshift(newLog);
-            saveLogs(logs);
-
-            logTextInput.value = '';
-            removeMediaBtn.click();
-            renderLogs();
-
-            showToast('Eintrag im lokalen Archiv verankert!');
-            appendTerminal(`> NEUER EINTRAG VERANKERT: #${newLog.id}`);
-        });
-
-        window.deleteLog = function (id) {
-            let logs = getLogs();
-            logs = logs.filter(log => log.id !== id);
-            saveLogs(logs);
-            renderLogs();
-            showToast('Eintrag gelöscht.');
-        };
-
-        clearLogsBtn.addEventListener('click', () => {
-            if (confirm('Gesamtes lokales Archiv wirklich löschen?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                renderLogs();
-                showToast('Archiv geleert.');
-            }
-        });
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            toastMsg.innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            reader.readAsText(file);
         }
 
-        window.addEventListener('resize', () => {
-            resizeStarCanvas();
-            if (gameActive) resizeGameCanvas();
+        document.addEventListener('DOMContentLoaded', renderChronik);
+
+        /* --- 4. CYBER-BALLOON MINISPIEL --- */
+        let gameInterval = null;
+        const modal = document.getElementById('game-modal');
+        const gCanvas = document.getElementById('game-canvas');
+        const gCtx = gCanvas.getContext('2d');
+        
+        let balloon = { x: 180, y: 400, radius: 18, speed: 2 };
+        let obstacles = [];
+
+        function startCyberBalloonGame() {
+            modal.style.display = 'flex';
+            balloon.x = gCanvas.width / 2;
+            balloon.y = gCanvas.height - 40;
+            obstacles = [];
+            
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(updateGame, 1000 / 60);
+        }
+
+        function stopCyberBalloonGame() {
+            modal.style.display = 'none';
+            clearInterval(gameInterval);
+        }
+
+        gCanvas.addEventListener('click', (e) => {
+            const rect = gCanvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            if (clickX < gCanvas.width / 2) {
+                balloon.x = Math.max(20, balloon.x - 20);
+            } else {
+                balloon.x = Math.min(gCanvas.width - 20, balloon.x + 20);
+            }
         });
 
-        window.onload = function () {
-            resizeStarCanvas();
-            initStars();
-            animateBackground();
-            renderLogs();
-        };
+        function updateGame() {
+            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+
+            if (Math.random() < 0.03) {
+                obstacles.push({
+                    x: Math.random() * (gCanvas.width - 40) + 20,
+                    y: 0,
+                    radius: 12,
+                    speed: Math.random() * 2 + 1.5
+                });
+            }
+
+            gCtx.fillStyle = '#ff4444';
+            obstacles.forEach((obs, index) => {
+                obs.y += obs.speed;
+                gCtx.beginPath();
+                gCtx.arc(obs.x, obs.y, obs.radius, 0, Math.PI * 2);
+                gCtx.fill();
+
+                let dist = Math.hypot(balloon.x - obs.x, balloon.y - obs.y);
+                if (dist < balloon.radius + obs.radius) {
+                    stopCyberBalloonGame();
+                    alert('CRASH! Datenstrom kollidiert.');
+                }
+
+                if (obs.y > gCanvas.height) obstacles.splice(index, 1);
+            });
+
+            gCtx.fillStyle = '#00ffcc';
+            gCtx.beginPath();
+            gCtx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
+            gCtx.fill();
+        }
     </script>
 </body>
 </html>
