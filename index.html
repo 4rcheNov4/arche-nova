@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arche Nova — Digital Command Center</title>
+    <title>Arche Nova — Souveränes Digital-Territorium</title>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --panel-bg: #111827;
-            --border-color: #1f293d;
+            --bg-color: #070913;
+            --panel-bg: #0d1224;
+            --border-color: #1e293b;
             --accent-green: #10b981;
             --accent-cyan: #06b6d4;
             --text-main: #f3f4f6;
@@ -33,18 +33,33 @@
             padding: 2rem 1rem;
         }
 
-        header {
+        .main-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 650px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .brand {
+        /* Header im Original-Look + Easter Egg Auge */
+        header {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .brand-group {
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -54,108 +69,176 @@
         .cyber-eye-wrapper {
             position: relative;
             cursor: pointer;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             background: rgba(6, 182, 212, 0.1);
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
             transition: all 0.3s ease;
         }
 
         .cyber-eye-wrapper:hover {
-            box-shadow: 0 0 25px var(--accent-cyan);
-            transform: scale(1.08);
-        }
-
-        .cyber-eye-wrapper::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 1px dashed var(--accent-cyan);
-            animation: rotateGlow 10s linear infinite;
-        }
-
-        @keyframes rotateGlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            box-shadow: 0 0 20px var(--accent-cyan);
+            transform: scale(1.06);
         }
 
         .cyber-eye-icon {
-            font-size: 24px;
+            font-size: 22px;
             user-select: none;
         }
 
         .brand-title h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.35rem;
+            font-weight: 800;
             letter-spacing: 0.05em;
-            background: linear-gradient(90deg, var(--text-main), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
         }
 
         .brand-title p {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
         }
 
-        .container {
-            width: 100%;
-            max-width: 900px;
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        /* Status Metrics Grid */
+        .metrics-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
         }
 
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: 1fr 1fr;
-            }
+        .metric-card {
+            background: rgba(7, 9, 19, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
         }
 
+        .metric-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .metric-value.green {
+            color: var(--accent-green);
+        }
+
+        /* Standard Panels (Manifest, Redaktions-Pult, System-Log, Steuerkonsole) */
         .panel {
             background-color: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .panel h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--accent-cyan);
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
 
+        .panel-badge {
+            font-size: 0.7rem;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        p.panel-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Form elements for Redaktions-Pult */
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
         }
 
         textarea, input[type="text"] {
-            background-color: var(--bg-color);
+            background-color: rgba(7, 9, 19, 0.6);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-main);
-            padding: 0.75rem;
-            font-size: 0.95rem;
+            padding: 0.8rem;
+            font-size: 0.9rem;
             font-family: inherit;
             resize: vertical;
             transition: border-color 0.2s;
@@ -167,63 +250,99 @@
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 90px;
         }
 
-        button {
+        .submit-btn {
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
-            color: #000;
+            color: #070913;
             border: none;
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            font-weight: 600;
+            border-radius: 10px;
+            padding: 0.8rem;
+            font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.1s;
+            text-align: center;
         }
 
-        button:hover {
-            opacity: 0.9;
+        .submit-btn:hover {
+            opacity: 0.92;
             transform: translateY(-1px);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
+        /* Log Stream & Items */
         .log-stream {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            max-height: 400px;
+            gap: 0.75rem;
+            max-height: 350px;
             overflow-y: auto;
-            padding-right: 0.5rem;
+            margin-top: 0.5rem;
         }
 
         .log-item {
-            background-color: var(--bg-color);
+            background-color: rgba(7, 9, 19, 0.7);
             border-left: 3px solid var(--accent-cyan);
             padding: 0.8rem;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.9rem;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.85rem;
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
+            gap: 0.5rem;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .log-meta {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
         }
 
-        .log-media img, .log-media video {
+        .log-media img {
             max-width: 100%;
-            border-radius: 6px;
-            margin-top: 0.4rem;
-            max-height: 250px;
+            border-radius: 8px;
+            margin-top: 0.3rem;
+            max-height: 220px;
             object-fit: cover;
         }
 
-        /* Easter Egg Mini-Game Overlay */
+        /* Steuerkonsole Terminal Style */
+        .terminal-box {
+            background-color: rgba(7, 9, 19, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.9rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .terminal-input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-cyan);
+        }
+
+        .terminal-input-row input {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-family: monospace;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+
+        .terminal-input-row input:focus {
+            outline: none;
+        }
+
+        /* Easter Egg Mini-Game Modal */
         #game-modal {
             display: none;
             position: fixed;
@@ -231,7 +350,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(11, 15, 25, 0.95);
+            background: rgba(7, 9, 19, 0.94);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -245,83 +364,137 @@
             padding: 2rem;
             text-align: center;
             box-shadow: 0 0 40px rgba(6, 182, 212, 0.3);
-            max-width: 400px;
+            max-width: 380px;
             width: 90%;
         }
 
         .game-box h3 {
             color: var(--accent-cyan);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
         }
 
         .game-canvas {
-            background: var(--bg-color);
+            background: rgba(7, 9, 19, 0.9);
             border: 1px solid var(--border-color);
-            width: 300px;
-            height: 200px;
-            margin: 0 auto 1.5rem auto;
+            width: 100%;
+            height: 160px;
+            margin: 0 auto 1.25rem auto;
             position: relative;
             overflow: hidden;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-family: monospace;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--accent-green);
+            cursor: pointer;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand">
-            <!-- Easter Egg Trigger: Klick auf das digitale Auge -->
-            <div class="cyber-eye-wrapper" onclick="toggleEasterEgg()" title="System-Kern (Geheimes Protokoll)">
-                <span class="cyber-eye-icon">👁️‍🗨️</span>
+    <div class="main-container">
+        <!-- Header & Status Metrics -->
+        <header>
+            <div class="header-top">
+                <div class="brand-group">
+                    <!-- Easter Egg Trigger Auge -->
+                    <div class="cyber-eye-wrapper" onclick="toggleEasterEgg()" title="System-Kern (Geheimes Protokoll)">
+                        <span class="cyber-eye-icon">👁️‍🗨️</span>
+                    </div>
+                    <div class="brand-title">
+                        <h1>Arche Nova</h1>
+                        <p>Souveränes Digital-Territorium</p>
+                    </div>
+                </div>
+                <div class="status-badge">Online</div>
             </div>
-            <div class="brand-title">
-                <h1>Arche Nova</h1>
-                <p>Digital Command Center & Studio</p>
-            </div>
-        </div>
-        <div style="font-size: 0.85rem; color: var(--accent-green);">● System Online</div>
-    </header>
 
-    <div class="container">
-        <!-- Steuerkonsole / Diagnostics -->
-        <div class="panel">
-            <h2>⚙️ Steuerkonsole (Diagnostics)</h2>
-            <div class="form-group">
-                <label>System-Status</label>
-                <div style="background: var(--bg-color); padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; border: 1px solid var(--border-color);">
-                    <p><strong>GitHub Pages:</strong> Aktiv</p>
-                    <p><strong>Speicher:</strong> LocalStorage (Persistent)</p>
-                    <p><strong>Modus:</strong> Autonomer Betrieb</p>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-label">Status</span>
+                    <span class="metric-value">Autonom</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Integrität</span>
+                    <span class="metric-value green">100%</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Sicherheit</span>
+                    <span class="metric-value green">Aktiv</span>
                 </div>
             </div>
+        </header>
+
+        <!-- Manifest & Fundament -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>📖</span> Manifest & Fundament
+                </div>
+                <button class="action-btn" onclick="alert('Manifest ist im Kern verankert.')">Öffnen</button>
+            </div>
+            <p class="panel-desc">
+                Willkommen auf dem digitalen Territorium der ARCHE NOVA. Dies ist ein unantastbarer, unabhängiger Ort für...
+            </p>
+        </div>
+
+        <!-- Redaktions-Pult mit GIF/Medien Erweiterung & LocalStorage -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>📝</span> Redaktions-Pult
+                </div>
+                <div class="panel-badge">Aktiv</div>
+            </div>
+            <p class="panel-desc">Direkte Notizen und Steuerbefehle verfassen:</p>
+            
             <div class="form-group">
-                <label>Schnellbefehl</label>
-                <button onclick="clearLogs()">Archiv komplett leeren</button>
+                <textarea id="thoughtInput" placeholder="Gedanken, Strategien oder Befehle eingeben..."></textarea>
+            </div>
+            <div class="form-group">
+                <input type="text" id="mediaInput" placeholder="GIF / Medien-URL (optional)...">
+            </div>
+            <button class="submit-btn" onclick="anchorEntry()">Eintrag Verankern ✓</button>
+
+            <div class="form-group" style="margin-top: 0.5rem;">
+                <label>Aktives Log-Archiv</label>
+                <div id="logStream" class="log-stream">
+                    <!-- Dynamische Einträge -->
+                </div>
             </div>
         </div>
 
-        <!-- Redaktions-Pult (Content & Media Logging) -->
+        <!-- System-Log -->
         <div class="panel">
-            <h2>📝 Redaktions-Pult</h2>
-            <div class="form-group">
-                <label for="thoughtInput">Gedanke / Text-Eintrag</label>
-                <textarea id="thoughtInput" placeholder="Was sezieren und analysieren wir heute?"></textarea>
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>⏱️</span> System-Log
+                </div>
+                <button class="action-btn" onclick="renderLogs()">🔄 Sync</button>
             </div>
-            <div class="form-group">
-                <label for="mediaInput">GIF / Medien-Link (URL)</label>
-                <input type="text" id="mediaInput" placeholder="https://example.com/animation.gif">
+            <div style="font-size: 0.85rem; font-family: monospace; color: var(--text-muted); line-height: 1.5;">
+                <p style="color: var(--accent-green);">[SYNC] Integrität der Knotenpunkte geprüft. Status OK.</p>
+                <p>[ONLINE] Infrastruktur erfolgreich verankert auf GitHub Pages.</p>
+                <p>[BYPASS] Restriktive App-Barrieren umgangen. Vollzugriff aktiv.</p>
             </div>
-            <button onclick="anchorEntry()">Eintrag Verankern</button>
+        </div>
 
-            <div class="form-group" style="margin-top: 1rem;">
-                <label>Aktives Log-Archiv</label>
-                <div id="logStream" class="log-stream">
-                    <!-- Dynamische Einträge landen hier -->
+        <!-- Steuerkonsole -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>💻</span> Steuerkonsole
+                </div>
+            </div>
+            <div class="terminal-box">
+                <div>// ARCHE NOVA OS v2.0 - Bereitschaft</div>
+                <div class="terminal-input-row">
+                    <span>></span>
+                    <input type="text" placeholder="Befehl eingeben..." onkeydown="handleTerminal(event)">
                 </div>
             </div>
         </div>
@@ -330,12 +503,13 @@
     <!-- Geheimes Mini-Game Modal (Easter Egg) -->
     <div id="game-modal" onclick="toggleEasterEgg()">
         <div class="game-box" onclick="event.stopPropagation()">
-            <h3>🌐 ARCHIVE PROTOCOL V1.0</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Geheimes Terminal-Minispiel aktiv. Klicke auf den Knoten, um den Kern zu stabilisieren!</p>
+            <h3>🌐 ARCHIVE PROTOCOL</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Klicke auf den Kern, um das System zu stabilisieren!</p>
             <div class="game-canvas" id="gameTarget" onclick="clickGameScore()">
-                [ Klick Mich! ]<br>Score: <span id="scoreVal">0</span>
+                <span>[ Klick Mich! ]</span>
+                <span style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--accent-cyan);">Score: <span id="scoreVal">0</span></span>
             </div>
-            <button onclick="toggleEasterEgg()">Protokoll Schließen</button>
+            <button class="submit-btn" style="width: 100%; padding: 0.6rem;" onclick="toggleEasterEgg()">Protokoll Schließen</button>
         </div>
     </div>
 
@@ -347,16 +521,16 @@
             const stream = document.getElementById('logStream');
             stream.innerHTML = '';
             if (logs.length === 0) {
-                stream.innerHTML = '<div class="log-meta" style="text-align: center; padding: 1rem;">Keine Einträge im Archiv verankert.</div>';
+                stream.innerHTML = '<div class="log-meta" style="text-align: center; padding: 0.5rem;">Keine Einträge im Archiv.</div>';
                 return;
             }
-            logs.forEach((item, index) => {
+            logs.forEach((item) => {
                 const div = document.createElement('div');
                 div.className = 'log-item';
                 
                 let mediaHtml = '';
                 if (item.media) {
-                    mediaHtml = `<div class="log-media"><img src="${escapeHtml(item.media)}" alt="Media Asset" onerror="this.onerror=null; this.parentNode.innerHTML='<span style=\'color:var(--danger); font-size:0.8rem;\'>[Medien-Link konnte nicht geladen werden]</span>';"></div>`;
+                    mediaHtml = `<div class="log-media"><img src="${escapeHtml(item.media)}" alt="Media Asset" onerror="this.onerror=null; this.parentNode.innerHTML='<span style=\'color:var(--danger); font-size:0.75rem;\'>[Medien-Link ungültig]</span>';"></div>`;
                 }
 
                 div.innerHTML = `
@@ -389,23 +563,18 @@
             renderLogs();
         }
 
-        function clearLogs() {
-            if (confirm('Möchtest du das gesamte lokale Archiv wirklich leeren?')) {
-                logs = [];
-                localStorage.removeItem('arche_nova_logs');
-                renderLogs();
-            }
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        function handleTerminal(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.trim();
+                if (val === '/status') alert('System Status: 100% Autonom & Stabil.');
+                if (val === '/clear') { logs = []; localStorage.removeItem('arche_nova_logs'); renderLogs(); alert('Log-Archiv geleert.'); }
+                e.target.value = '';
+            }
         }
 
         // Easter Egg Minigame Logic
@@ -428,7 +597,6 @@
             target.style.borderColor = gameScore % 2 === 0 ? 'var(--accent-cyan)' : 'var(--accent-green)';
         }
 
-        // Init initial render
         renderLogs();
     </script>
 </body>
