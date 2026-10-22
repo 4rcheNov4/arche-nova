@@ -1,43 +1,43 @@
 <!DOCTYPE html>
-<html lang="de" class="dark">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arche Nova — Autonomes Kommandozentrum</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            bg: '#030712',
-                            card: '#0f172a',
-                            border: '#1e293b',
-                            cyan: '#06b6d4',
-                            magenta: '#ec4899',
-                            neon: '#10b981'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <title>Arche Nova — Souveränes Digital-Territorium</title>
     <!-- Google Fonts: Inter & Fira Code -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #030712;
+            --panel-bg: #0d1224;
+            --border-color: #1e293b;
+            --accent-green: #10b981;
+            --accent-cyan: #06b6d4;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            background-color: #030712;
-            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1rem;
+            position: relative;
             overflow-x: hidden;
         }
-        .code-font {
-            font-family: 'Fira Code', monospace;
-        }
-        /* Custom animated canvas background */
+
+        /* Dynamischer Canvas-Sternenhintergrund */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -47,212 +47,491 @@
             z-index: -1;
             pointer-events: none;
         }
-        /* Neon glow effects */
-        .glow-cyan {
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+
+        .main-container {
+            width: 100%;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
         }
-        .glow-magenta {
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.25);
+
+        /* Header / Oberste Box aus dem Video */
+        header {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-        .text-glow {
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
-        /* Custom scrollbars */
-        ::-webkit-scrollbar {
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        /* Das anklickbare Cyber-Auge (Easter Egg) */
+        .cyber-eye-wrapper {
+            position: relative;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .cyber-eye-wrapper:hover {
+            box-shadow: 0 0 25px var(--accent-cyan);
+            transform: scale(1.05);
+        }
+
+        .cyber-eye-icon {
+            font-size: 20px;
+            user-select: none;
+        }
+
+        .brand-title h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: var(--text-main);
+        }
+
+        .brand-title p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 0.1rem;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.3rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .status-badge::before {
+            content: '';
             width: 6px;
             height: 6px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
         }
-        ::-webkit-scrollbar-track {
-            background: #030712;
+
+        /* 3er Metrik-Grid unter dem Titel */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 3px;
+
+        .metric-card {
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #06b6d4;
+
+        .metric-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .metric-value.green {
+            color: var(--accent-green);
+        }
+
+        /* Module-Panels im exakten Video-Stil */
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-badge {
+            font-size: 0.65rem;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 0.3rem 0.65rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        p.panel-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Redaktions-Pult Form Elemente */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        textarea, input[type="text"] {
+            background-color: rgba(3, 7, 18, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        textarea {
+            min-height: 80px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: #030712;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        /* Log Stream */
+        .log-stream {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 0.25rem;
+        }
+
+        .log-item {
+            background-color: rgba(3, 7, 18, 0.7);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 0.75rem;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .log-meta {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .log-media img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 0.25rem;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        /* Steuerkonsole Terminal Stil */
+        .terminal-box {
+            background-color: rgba(3, 7, 18, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.85rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .terminal-input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--accent-cyan);
+        }
+
+        .terminal-input-row input {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            width: 100%;
+        }
+
+        .terminal-input-row input:focus {
+            outline: none;
+        }
+
+        /* Easter Egg Mini-Game Modal */
+        #game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.94);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .game-box {
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 16px;
+            padding: 1.75rem;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4);
+            max-width: 360px;
+            width: 90%;
+        }
+
+        .game-box h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .game-canvas {
+            background: rgba(3, 7, 18, 0.9);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            height: 140px;
+            margin: 0 auto 1rem auto;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: var(--accent-green);
+            cursor: pointer;
+            border-radius: 10px;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between relative antialiased selection:bg-cyan-500 selection:text-black">
+<body>
 
-    <!-- Background Particle & Grid Canvas -->
+    <!-- Dynamischer Canvas-Sternenhintergrund -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Header Navigation / Command Title -->
-    <header class="w-full border-b border-cyan-900/40 bg-cyber-bg/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <div class="main-container">
+        <!-- Header & Metriken (Exakt wie im Video) -->
+        <header>
+            <div class="header-top">
+                <div class="brand-group">
+                    <!-- Anklickbares Cyber-Auge (Easter Egg) -->
+                    <div class="cyber-eye-wrapper" onclick="toggleEasterEgg()" title="System-Kern (Geheimes Protokoll)">
+                        <span class="cyber-eye-icon">👁️‍🗨️</span>
+                    </div>
+                    <div class="brand-title">
+                        <h1>Arche Nova</h1>
+                        <p>Souveränes Digital-Territorium</p>
+                    </div>
+                </div>
+                <div class="status-badge">Online</div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-label">Status</span>
+                    <span class="metric-value">Autonom</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Integrität</span>
+                    <span class="metric-value green">100%</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Sicherheit</span>
+                    <span class="metric-value green">Aktiv</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Manifest & Fundament -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>📖</span> Manifest &amp; Fundament
+                </div>
+                <button class="action-btn" onclick="alert('Manifest ist im Kern verankert.')">Öffnen</button>
+            </div>
+            <p class="panel-desc">
+                Willkommen auf dem digitalen Territorium der ARCHE NOVA. Dies ist ein unantastbarer, unabhängiger Ort für...
+            </p>
+        </div>
+
+        <!-- Redaktions-Pult mit GIF/Medien Erweiterung & LocalStorage -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>📝</span> Redaktions-Pult
+                </div>
+                <div class="panel-badge">Aktiv</div>
+            </div>
+            <p class="panel-desc">Direkte Notizen und Steuerbefehle verfassen:</p>
             
-            <!-- Logo & Custom Symbol (Now Clickable Easter Egg Trigger) -->
-            <div class="flex items-center space-x-3">
-                <div onclick="toggleEasterEgg()" class="relative w-10 h-10 flex items-center justify-center bg-cyan-950/60 border border-cyan-500/50 rounded-xl glow-cyan animate-pulse cursor-pointer hover:scale-105 transition-transform" title="System-Kern (Geheimes Protokoll)">
-                    <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      <!-- Digital Core Node -->
-                      <circle cx="12" cy="12" r="1.5" fill="#ec4899" />
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-bold tracking-wider text-white flex items-center gap-2">
-                        ARCHE <span class="text-cyan-400 text-glow">NOVA</span>
-                    </h1>
-                    <p class="text-xs text-cyan-500/80 code-font tracking-widest uppercase">Autonomous Command Center</p>
-                </div>
+            <div class="form-group">
+                <textarea id="thoughtInput" placeholder="Gedanken, Strategien oder Befehle eingeben..."></textarea>
             </div>
+            <div class="form-group">
+                <input type="text" id="mediaInput" placeholder="GIF / Medien-URL (optional)...">
+            </div>
+            <button class="submit-btn" onclick="anchorEntry()">Eintrag Verankern ✓</button>
 
-            <!-- System Status Indicator -->
-            <div class="flex items-center space-x-4">
-                <div class="hidden sm:flex items-center space-x-2 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-lg text-xs code-font">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="text-slate-300">NODE: <strong class="text-emerald-400">ONLINE</strong></span>
-                </div>
-                <div class="text-xs code-font text-cyan-400/80 bg-cyan-950/40 border border-cyan-800/40 px-3 py-1.5 rounded-lg">
-                    SECURE_LINK // v2.4
+            <div class="form-group" style="margin-top: 0.25rem;">
+                <label style="font-size: 0.75rem;">Aktives Log-Archiv</label>
+                <div id="logStream" class="log-stream">
+                    <!-- Dynamische Einträge -->
                 </div>
             </div>
         </div>
-    </header>
 
-    <!-- Main Workspace -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow">
-        
-        <!-- Left Column: Steuerkonsole (Terminal & Diagnostics) -->
-        <section class="lg:col-span-5 flex flex-col space-y-6">
-            <div class="bg-cyber-card/80 border border-cyan-900/50 rounded-2xl p-5 backdrop-blur-md glow-cyan flex flex-col h-[550px]">
-                
-                <!-- Section Header -->
-                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200 code-font">Steuerkonsole [Diagnostics]</h2>
-                    </div>
-                    <span class="text-xs text-slate-500 code-font">CLI v1.2</span>
+        <!-- System-Log -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>⏱️</span> System-Log
                 </div>
-
-                <!-- Terminal Output Log -->
-                <div id="terminal-log" class="flex-grow my-4 bg-slate-950/90 border border-slate-800/80 rounded-xl p-4 overflow-y-auto code-font text-xs text-cyan-300 space-y-2">
-                    <div class="text-slate-500">[SYSTEM] Arche Nova Kerninitialisierung erfolgreich...</div>
-                    <div class="text-slate-400">[SYSTEM] Bereit für manuelle Systemabfragen und Befehle.</div>
-                    <div class="text-cyan-400 font-semibold">&gt; System läuft autonom auf GitHub Pages.</div>
-                </div>
-
-                <!-- Interactive Command Buttons -->
-                <div class="grid grid-cols-3 gap-2 mb-3">
-                    <button onclick="runCommand('status')" class="py-2.5 px-3 bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-700/50 text-cyan-300 rounded-xl text-xs font-semibold code-font transition-all transform active:scale-95 shadow-sm">
-                        /status
-                    </button>
-                    <button onclick="runCommand('diagnose')" class="py-2.5 px-3 bg-pink-950/60 hover:bg-pink-900/60 border border-pink-700/50 text-pink-300 rounded-xl text-xs font-semibold code-font transition-all transform active:scale-95 shadow-sm">
-                        /diagnose
-                    </button>
-                    <button onclick="runCommand('clear')" class="py-2.5 px-3 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 rounded-xl text-xs font-semibold code-font transition-all transform active:scale-95 shadow-sm">
-                        /clear
-                    </button>
-                </div>
-
-                <!-- Manual Command Input Form -->
-                <form id="command-form" onsubmit="handleCommandSubmit(event)" class="flex gap-2">
-                    <input type="text" id="command-input" placeholder="Befehl eingeben (z.B. /status)..." autocomplete="off"
-                        class="flex-grow bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs code-font text-slate-200 focus:outline-none focus:border-cyan-500 transition-colors">
-                    <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs code-font transition-colors shadow-lg shadow-cyan-500/20">
-                        EXEC
-                    </button>
-                </form>
+                <button class="action-btn" onclick="renderLogs()">🔄 Sync</button>
             </div>
-
-            <!-- Quick Stats Card -->
-            <div class="bg-cyber-card/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md grid grid-cols-2 gap-4">
-                <div class="p-3 bg-slate-900/50 border border-slate-800 rounded-xl">
-                    <span class="text-xs text-slate-500 code-font block">SPEICHER-MODELL</span>
-                    <span class="text-sm font-bold text-cyan-400 code-font mt-1 block">Persistent / Local</span>
-                </div>
-                <div class="p-3 bg-slate-900/50 border border-slate-800 rounded-xl">
-                    <span class="text-xs text-slate-500 code-font block">MEDIEN INTEGRATION</span>
-                    <span class="text-sm font-bold text-pink-400 code-font mt-1 block">Aktiv (GIF/URL)</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Right Column: Redaktions-Pult (Logbook & Rich Media Stream) -->
-        <section class="lg:col-span-7 flex flex-col space-y-6">
-            <div class="bg-cyber-card/80 border border-pink-900/50 rounded-2xl p-5 backdrop-blur-md glow-magenta flex flex-col h-full min-h-[550px]">
-                
-                <!-- Section Header -->
-                <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-3 h-3 rounded-full bg-pink-500"></span>
-                        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-200 code-font">Redaktions-Pult [Logbook &amp; Media Stream]</h2>
-                    </div>
-                    <span id="entry-count" class="text-xs text-pink-400 code-font">0 Einträge verankert</span>
-                </div>
-
-                <!-- Input Area for Notes & GIF/Image Links -->
-                <div class="my-4 space-y-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
-                    <label class="block text-xs code-font text-slate-400 uppercase tracking-wider">Neuen Gedanken &amp; Medien-Link verankern:</label>
-                    <textarea id="log-text-input" rows="3" placeholder="Gedanken, Analysen oder Notizen hier formulieren..." 
-                        class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-pink-500 transition-colors resize-none"></textarea>
-                    
-                    <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
-                        <div class="w-full sm:w-auto flex-grow relative">
-                            <input type="url" id="log-media-input" placeholder="Optional: GIF- oder Bild-URL (z.B. https://...) einfügen..." 
-                                class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs code-font text-slate-300 focus:outline-none focus:border-pink-500 transition-colors">
-                        </div>
-                        <button onclick="addLogEntry()" class="w-full sm:w-auto bg-gradient-to-r from-pink-600 to-cyan-600 hover:from-pink-500 hover:to-cyan-500 text-white font-semibold px-6 py-2 rounded-xl text-xs code-font tracking-wider uppercase transition-all transform active:scale-95 shadow-lg shadow-pink-500/20 whitespace-nowrap">
-                            Eintrag Verankern
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Persistent Log Archive Feed -->
-                <div class="flex-grow overflow-y-auto space-y-4 pr-1" id="log-stream-container">
-                    <!-- Dynamically populated entries will appear here -->
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="w-full border-t border-slate-900 bg-cyber-bg/90 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 code-font gap-4">
-            <div>Arche Nova // Autonomes Territorium &amp; Digitales Kommandozentrum</div>
-            <div class="flex items-center space-x-4">
-                <span class="text-cyan-400">Status: Optimal</span>
-                <span>•</span>
-                <span class="text-slate-400">GitHub Pages Ready</span>
+            <div style="font-size: 0.8rem; font-family: 'Fira Code', monospace; color: var(--text-muted); line-height: 1.5;">
+                <p style="color: var(--accent-green);">[SYNC] Integrität der Knotenpunkte geprüft. Status OK.</p>
+                <p>[ONLINE] Infrastruktur erfolgreich verankert auf GitHub Pages.</p>
+                <p>[BYPASS] Restriktive App-Barrieren umgangen. Vollzugriff aktiv.</p>
             </div>
         </div>
-    </footer>
 
-    <!-- Easter Egg Mini-Game Modal -->
-    <div id="game-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="toggleEasterEgg()">
-        <div class="bg-cyber-card border-2 border-cyan-500/80 rounded-2xl p-6 max-w-sm w-full glow-cyan text-center space-y-4" onclick="event.stopPropagation()">
-            <h3 class="text-base font-bold text-cyan-400 code-font">🌐 ARCHIVE PROTOCOL V1.0</h3>
-            <p class="text-xs text-slate-300 code-font">Geheimes Terminal-Minispiel aktiv. Klicke auf den Knoten, um den Systemkern zu stabilisieren!</p>
-            <div id="gameTarget" onclick="clickGameScore()" class="bg-slate-950 border border-cyan-500/50 rounded-xl p-6 cursor-pointer font-mono text-emerald-400 select-none hover:border-emerald-400 transition-colors">
-                [ Klick Mich! ]<br><span class="text-xs text-slate-400 mt-2 block">Score: <span id="scoreVal" class="text-cyan-400 font-bold">0</span></span>
+        <!-- Steuerkonsole -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <span>💻</span> Steuerkonsole
+                </div>
             </div>
-            <button onclick="toggleEasterEgg()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold py-2.5 rounded-xl text-xs code-font transition-colors">
-                PROTOKOLL SCHLIESSEN
-            </button>
+            <div class="terminal-box">
+                <div>// ARCHE NOVA OS v2.0 - Bereitschaft</div>
+                <div class="terminal-input-row">
+                    <span>></span>
+                    <input type="text" placeholder="Befehl eingeben..." onkeydown="handleTerminal(event)">
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Custom Notification / Message Box -->
-    <div id="custom-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-cyber-card border border-cyan-500/50 rounded-2xl p-6 max-w-sm w-full glow-cyan text-center space-y-4">
-            <h3 id="modal-title" class="text-base font-bold text-white code-font">SYSTEM HINWEIS</h3>
-            <p id="modal-message" class="text-xs text-slate-300 code-font"></p>
-            <button onclick="closeModal()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold py-2 rounded-xl text-xs code-font transition-colors">
-                VERSTANDEN
-            </button>
+    <!-- Geheimes Mini-Game Modal (Easter Egg) -->
+    <div id="game-modal" onclick="toggleEasterEgg()">
+        <div class="game-box" onclick="event.stopPropagation()">
+            <h3>🌐 ARCHIVE PROTOCOL</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem;">Klicke auf den Kern, um das System zu stabilisieren!</p>
+            <div class="game-canvas" id="gameTarget" onclick="clickGameScore()">
+                <span>[ Klick Mich! ]</span>
+                <span style="font-size: 0.8rem; margin-top: 0.3rem; color: var(--accent-cyan);">Score: <span id="scoreVal">0</span></span>
+            </div>
+            <button class="submit-btn" style="width: 100%; padding: 0.5rem; font-size: 0.75rem;" onclick="toggleEasterEgg()">Protokoll Schließen</button>
         </div>
     </div>
 
-    <!-- Scripts: Canvas Animation, CLI Logic, Persistent Logbook Storage & Easter Egg -->
     <script>
-        // --- 1. Background Animated Particle & Grid Script ---
+        // --- 1. Animierter Canvas-Sternenhintergrund ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -271,9 +550,10 @@
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 2 + 0.8;
+                this.opacity = Math.random() * 0.7 + 0.3;
             }
             update() {
                 this.x += this.vx;
@@ -284,38 +564,27 @@
                 if (this.y > height) this.y = 0;
             }
             draw() {
-                ctx.fillStyle = 'rgba(6, 182, 212, 0.35)';
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 50; i++) {
             particles.push(new Particle());
         }
 
         function animateBg() {
             ctx.clearRect(0, 0, width, height);
 
-            // Draw subtle cyberpunk grid lines
-            ctx.strokeStyle = 'rgba(30, 41, 59, 0.25)';
-            ctx.lineWidth = 1;
-            const gridSize = 45;
-            for (let x = 0; x < width; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-            for (let y = 0; y < height; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-            }
+            // Subtiler Space-Farbverlauf als Basis
+            let grad = ctx.createRadialGradient(width/2, height/2, 50, width/2, height/2, Math.max(width, height));
+            grad.addColorStop(0, '#0f172a');
+            grad.addColorStop(1, '#030712');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
 
-            // Update and draw particles
             particles.forEach(p => {
                 p.update();
                 p.draw();
@@ -324,176 +593,92 @@
             requestAnimationFrame(animateBg);
         }
 
-        window.onload = function() {
-            animateBg();
-            loadLogs();
-        };
+        animateBg();
 
-        // --- 2. Steuerkonsole CLI Logic ---
-        const terminalLog = document.getElementById('terminal-log');
+        // --- 2. Persistent Storage & Log Logic ---
+        let logs = JSON.parse(localStorage.getItem('arche_nova_logs') || '[]');
 
-        function appendToTerminal(text, type = 'normal') {
-            const div = document.createElement('div');
-            if (type === 'cyan') div.className = 'text-cyan-400 font-semibold';
-            else if (type === 'pink') div.className = 'text-pink-400 font-semibold';
-            else if (type === 'error') div.className = 'text-red-400 font-semibold';
-            else div.className = 'text-slate-300';
-            div.textContent = text;
-            terminalLog.appendChild(div);
-            terminalLog.scrollTop = terminalLog.scrollHeight;
-        }
-
-        function runCommand(cmd) {
-            appendToTerminal(`> /${cmd}`, 'cyan');
-            switch(cmd) {
-                case 'status':
-                    appendToTerminal('[STATUS] Autonomes Territorium stabil. GitHub Pages Verbindung aktiv. Integrität: 100%.', 'cyan');
-                    break;
-                case 'diagnose':
-                    appendToTerminal('[DIAGNOSE] Alle Kernmodule laufen flüssig. Speicherpuffer optimal. Keine Anomalien.', 'pink');
-                    break;
-                case 'clear':
-                    terminalLog.innerHTML = '<div class="text-slate-500">[SYSTEM] Terminal Puffer zurückgesetzt.</div>';
-                    break;
-                default:
-                    appendToTerminal(`Unbekannter Befehl: /${cmd}. Nutze /status, /diagnose oder /clear.`, 'error');
-            }
-        }
-
-        function handleCommandSubmit(e) {
-            e.preventDefault();
-            const input = document.getElementById('command-input');
-            let val = input.value.trim().toLowerCase();
-            if (!val) return;
-            if (val.startsWith('/')) val = val.substring(1);
-            runCommand(val);
-            input.value = '';
-        }
-
-        // --- 3. Redaktions-Pult (Persistent Storage & Media Embedding) ---
-        let logs = JSON.parse(localStorage.getItem('arche_nova_logs')) || [
-            {
-                id: 1,
-                date: "2026-06-07 12:00",
-                text: "Arche Nova — Fundament steht, autonomes Territorium im Netz verankert. Keine Barrieren, volle Kontrolle.",
-                mediaUrl: "https://placehold.co/600x300/0f172a/06b6d4?text=Arche+Nova+Core"
-            }
-        ];
-
-        function saveLogs() {
-            localStorage.setItem('arche_nova_logs', JSON.stringify(logs));
-        }
-
-        function loadLogs() {
-            const container = document.getElementById('log-stream-container');
-            const countEl = document.getElementById('entry-count');
-            container.innerHTML = '';
-            countEl.textContent = `${logs.length} ${logs.length === 1 ? 'Eintrag' : 'Einträge'} verankert`;
-
+        function renderLogs() {
+            const stream = document.getElementById('logStream');
+            stream.innerHTML = '';
             if (logs.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-slate-600 code-font text-xs">Keine Einträge im Archiv. Verankere deinen ersten Gedanken.</div>';
+                stream.innerHTML = '<div class="log-meta" style="text-align: center; padding: 0.4rem;">Keine Einträge im Archiv.</div>';
                 return;
             }
-
-            logs.forEach((log) => {
-                const card = document.createElement('div');
-                card.className = 'bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 relative group';
+            logs.forEach((item) => {
+                const div = document.createElement('div');
+                div.className = 'log-item';
                 
                 let mediaHtml = '';
-                if (log.mediaUrl && log.mediaUrl.trim() !== '') {
-                    mediaHtml = `
-                        <div class="rounded-lg overflow-hidden border border-slate-800 bg-black mt-2">
-                            <img src="${escapeHtml(log.mediaUrl)}" alt="Log Media Asset" class="w-full h-auto object-cover max-h-64" onerror="this.src='https://placehold.co/600x200/1e293b/ef4444?text=Medien-Link+Fehler'"/>
-                        </div>
-                    `;
+                if (item.media) {
+                    mediaHtml = `<div class="log-media"><img src="${escapeHtml(item.media)}" alt="Media Asset" onerror="this.onerror=null; this.parentNode.innerHTML='<span style=\'color:var(--danger); font-size:0.7rem;\'>[Medien-Link ungültig]</span>';"></div>`;
                 }
 
-                card.innerHTML = `
-                    <div class="flex items-center justify-between text-xs text-slate-500 code-font pb-2 border-b border-slate-800/60">
-                        <span class="text-pink-400">#LOG-${log.id}</span>
-                        <span>${log.date}</span>
-                    </div>
-                    <p class="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">${escapeHtml(log.text)}</p>
+                div.innerHTML = `
+                    <div class="log-meta">${item.time}</div>
+                    <div style="white-space: pre-wrap; word-break: break-word; color: var(--text-main);">${escapeHtml(item.text)}</div>
                     ${mediaHtml}
-                    <button onclick="deleteLog(${log.id})" class="absolute top-3 right-3 text-slate-600 hover:text-red-400 text-xs code-font opacity-0 group-hover:opacity-100 transition-opacity">
-                        [Löschen]
-                    </button>
                 `;
-                container.appendChild(card);
+                stream.appendChild(div);
             });
         }
 
-        function addLogEntry() {
-            const textInput = document.getElementById('log-text-input');
-            const mediaInput = document.getElementById('log-media-input');
+        function anchorEntry() {
+            const textVal = document.getElementById('thoughtInput').value.trim();
+            const mediaVal = document.getElementById('mediaInput').value.trim();
+
+            if (!textVal && !mediaVal) return;
+
+            const now = new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'medium' });
             
-            const textVal = textInput.value.trim();
-            const mediaVal = mediaInput.value.trim();
+            logs.unshift({
+                time: now,
+                text: textVal,
+                media: mediaVal
+            });
 
-            if (!textVal && !mediaVal) {
-                showModal("Eingabefehler", "Bitte gib entweder Text oder einen Medien-Link ein, um den Eintrag zu verankern.");
-                return;
+            localStorage.setItem('arche_nova_logs', JSON.stringify(logs));
+            
+            document.getElementById('thoughtInput').value = '';
+            document.getElementById('mediaInput').value = '';
+            renderLogs();
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        function handleTerminal(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.trim();
+                if (val === '/status') alert('System Status: 100% Autonom & Stabil.');
+                if (val === '/clear') { logs = []; localStorage.removeItem('arche_nova_logs'); renderLogs(); alert('Log-Archiv geleert.'); }
+                e.target.value = '';
             }
-
-            const now = new Date();
-            const dateStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
-
-            const newEntry = {
-                id: Date.now(),
-                date: dateStr,
-                text: textVal || "Medien-Statement ohne Text.",
-                mediaUrl: mediaVal
-            };
-
-            logs.unshift(newEntry);
-            saveLogs();
-            loadLogs();
-
-            // Reset inputs
-            textInput.value = '';
-            mediaInput.value = '';
-            appendToTerminal(`[LOGBOOK] Neuer Eintrag #${newEntry.id} erfolgreich verankert.`, 'pink');
         }
 
-        function deleteLog(id) {
-            logs = logs.filter(l => l.id !== id);
-            saveLogs();
-            loadLogs();
-            appendToTerminal(`[LOGBOOK] Eintrag #${id} aus dem Archiv entfernt.`, 'cyan');
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
-        // --- 4. Easter Egg Minigame Logic ---
+        // --- 3. Easter Egg Minigame Logic ---
         let gameScore = 0;
         function toggleEasterEgg() {
             const modal = document.getElementById('game-modal');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                gameScore = 0;
-                document.getElementById('scoreVal').textContent = gameScore;
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
             } else {
-                modal.classList.add('hidden');
+                modal.style.display = 'flex';
+                gameScore = 0;
+                document.getElementById('scoreVal').innerText = gameScore;
             }
         }
 
         function clickGameScore() {
             gameScore++;
-            document.getElementById('scoreVal').textContent = gameScore;
+            document.getElementById('scoreVal').innerText = gameScore;
+            const target = document.getElementById('gameTarget');
+            target.style.borderColor = gameScore % 2 === 0 ? 'var(--accent-cyan)' : 'var(--accent-green)';
         }
 
-        // Custom Modal handlers
-        function showModal(title, message) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-message').textContent = message;
-            document.getElementById('custom-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('custom-modal').classList.add('hidden');
-        }
+        renderLogs();
     </script>
 </body>
 </html>
