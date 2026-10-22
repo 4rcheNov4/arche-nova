@@ -161,9 +161,11 @@
 
         .tresor-karte img {
             max-width: 100%;
+            max-height: 250px;
             border-radius: 4px;
             margin-top: 8px;
             display: block;
+            object-fit: contain;
         }
 
         .delete-btn {
@@ -206,11 +208,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 3, 5, 0.92);
+            background: rgba(3, 3, 5, 0.95);
             z-index: 100;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            gap: 12px;
         }
 
         #game-canvas {
@@ -220,11 +223,26 @@
             max-width: 100%;
         }
 
+        .game-controls {
+            display: flex;
+            gap: 20px;
+            width: 360px;
+            max-width: 100%;
+        }
+
+        .game-controls button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1rem;
+            background: rgba(0, 255, 204, 0.2);
+        }
+
         .close-game {
-            margin-top: 15px;
             background: #ff4444;
             border-color: #ff4444;
             color: #fff;
+            width: 360px;
+            max-width: 100%;
         }
         .close-game:hover {
             background: #ff0000;
@@ -295,9 +313,13 @@
 
     </div>
 
-    <!-- Cyber-Balloon Modal -->
+    <!-- Cyber-Balloon Modal mit Steuerungs-Buttons -->
     <div id="game-modal">
-        <canvas id="game-canvas" width="360" height="480"></canvas>
+        <canvas id="game-canvas" width="360" height="400"></canvas>
+        <div class="game-controls">
+            <button onclick="movePlayer(-25)">◀ LINKS</button>
+            <button onclick="movePlayer(25)">RECHTS ▶</button>
+        </div>
         <button class="close-game" onclick="stopCyberBalloonGame()">Spiel beenden</button>
     </div>
 
@@ -387,6 +409,11 @@
                 const item = document.createElement('div');
                 item.className = 'tresor-karte';
 
+                let textHTML = '';
+                if (eintrag.text) {
+                    textHTML = `<div style="word-break: break-word; font-size: 0.9rem;">${eintrag.text.replace(/\n/g, '<br>')}</div>`;
+                }
+
                 let medienHTML = '';
                 if (eintrag.media) {
                     medienHTML = `<img src="${eintrag.media}" alt="Gespeichertes Medium">`;
@@ -394,7 +421,7 @@
 
                 item.innerHTML = `
                     <div style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 6px;">${eintrag.zeitstempel}</div>
-                    <div style="word-break: break-word; font-size: 0.9rem;">${eintrag.text.replace(/\n/g, '<br>')}</div>
+                    ${textHTML}
                     ${medienHTML}
                     <button class="delete-btn" onclick="loescheEintrag(${originalIndex})" title="Eintrag löschen">✕</button>
                 `;
@@ -489,7 +516,7 @@
         const gCanvas = document.getElementById('game-canvas');
         const gCtx = gCanvas.getContext('2d');
         
-        let balloon = { x: 180, y: 400, radius: 18, speed: 2 };
+        let balloon = { x: 180, y: 340, radius: 18, speed: 2 };
         let obstacles = [];
 
         function startCyberBalloonGame() {
@@ -507,13 +534,18 @@
             clearInterval(gameInterval);
         }
 
+        function movePlayer(offset) {
+            balloon.x = Math.max(20, Math.min(gCanvas.width - 20, balloon.x + offset));
+        }
+
+        // Auch direkte Klicks aufs Canvas behalten
         gCanvas.addEventListener('click', (e) => {
             const rect = gCanvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             if (clickX < gCanvas.width / 2) {
-                balloon.x = Math.max(20, balloon.x - 20);
+                movePlayer(-30);
             } else {
-                balloon.x = Math.min(gCanvas.width - 20, balloon.x + 20);
+                movePlayer(30);
             }
         });
 
