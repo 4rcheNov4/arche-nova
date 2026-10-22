@@ -1,684 +1,705 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arche Nova — Souveränes Digital-Territorium</title>
-    <!-- Google Fonts: Inter & Fira Code -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>ARCHE NOVA // Autonomous Digital Command</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#05070c',
+                            card: '#0a0f1d',
+                            border: '#1e293b',
+                            neon: '#00f0ff',
+                            magenta: '#ff0055',
+                            gold: '#ffb700',
+                            dim: '#64748b'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Courier New', 'Courier', 'monospace'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-color: #030712;
-            --panel-bg: #0d1224;
-            --border-color: #1e293b;
-            --accent-green: #10b981;
-            --accent-cyan: #06b6d4;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --danger: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 1rem;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Dynamischer Canvas-Sternenhintergrund */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .main-container {
-            width: 100%;
-            max-width: 550px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-
-        /* Header / Oberste Box aus dem Video */
-        header {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .brand-group {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
-        }
-
-        /* Das anklickbare Cyber-Auge (Easter Egg) */
-        .cyber-eye-wrapper {
-            position: relative;
-            cursor: pointer;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: rgba(6, 182, 212, 0.15);
-            border: 1px solid rgba(6, 182, 212, 0.4);
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
-            transition: all 0.3s ease;
-        }
-
-        .cyber-eye-wrapper:hover {
-            box-shadow: 0 0 25px var(--accent-cyan);
-            transform: scale(1.05);
-        }
-
-        .cyber-eye-icon {
-            font-size: 20px;
-            user-select: none;
-        }
-
-        .brand-title h1 {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            color: var(--text-main);
-        }
-
-        .brand-title p {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-top: 0.1rem;
-        }
-
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 0.3rem 0.65rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: var(--accent-green);
-            font-weight: 600;
-        }
-
-        .status-badge::before {
-            content: '';
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
             width: 6px;
-            height: 6px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
+        }
+        ::-webkit-scrollbar-track {
+            background: #05070c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
         }
 
-        /* 3er Metrik-Grid unter dem Titel */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
+        /* Glassmorphism panel styling */
+        .glass-panel {
+            background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
         }
 
-        .metric-card {
-            background: rgba(3, 7, 18, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 0.6rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
+        .glass-panel:hover {
+            border-color: rgba(0, 240, 255, 0.4);
         }
 
-        .metric-label {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        /* Neon glow classes */
+        .neon-glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+        }
+        .neon-glow-magenta {
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.25);
         }
 
-        .metric-value {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-main);
+        /* Scanline Overlay Effect */
+        .scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
         }
 
-        .metric-value.green {
-            color: var(--accent-green);
-        }
-
-        /* Module-Panels im exakten Video-Stil */
-        .panel {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.85rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .panel-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .panel-badge {
-            font-size: 0.65rem;
-            background: rgba(6, 182, 212, 0.1);
-            color: var(--accent-cyan);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        .action-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--accent-cyan);
-            padding: 0.3rem 0.65rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(6, 182, 212, 0.05);
-        }
-
-        p.panel-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* Redaktions-Pult Form Elemente */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        textarea, input[type="text"] {
-            background-color: rgba(3, 7, 18, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-main);
-            padding: 0.75rem;
-            font-size: 0.85rem;
-            font-family: inherit;
-            resize: vertical;
-            transition: border-color 0.2s;
-        }
-
-        textarea:focus, input[type="text"]:focus {
-            outline: none;
-            border-color: var(--accent-cyan);
-        }
-
-        textarea {
-            min-height: 80px;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
-            color: #030712;
-            border: none;
-            border-radius: 10px;
-            padding: 0.75rem;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-            text-align: center;
-        }
-
-        .submit-btn:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-        }
-
-        /* Log Stream */
-        .log-stream {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 0.25rem;
-        }
-
-        .log-item {
-            background-color: rgba(3, 7, 18, 0.7);
-            border-left: 3px solid var(--accent-cyan);
-            padding: 0.75rem;
-            border-radius: 0 10px 10px 0;
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            border-top: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .log-meta {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            font-family: 'Fira Code', monospace;
-        }
-
-        .log-media img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 0.25rem;
-            max-height: 200px;
-            object-fit: cover;
-        }
-
-        /* Steuerkonsole Terminal Stil */
-        .terminal-box {
-            background-color: rgba(3, 7, 18, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 0.85rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .terminal-input-row {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--accent-cyan);
-        }
-
-        .terminal-input-row input {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            width: 100%;
-        }
-
-        .terminal-input-row input:focus {
-            outline: none;
-        }
-
-        /* Easter Egg Mini-Game Modal */
-        #game-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(3, 7, 18, 0.94);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .game-box {
-            background: var(--panel-bg);
-            border: 2px solid var(--accent-cyan);
-            border-radius: 16px;
-            padding: 1.75rem;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4);
-            max-width: 360px;
-            width: 90%;
-        }
-
-        .game-box h3 {
-            color: var(--accent-cyan);
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .game-canvas {
-            background: rgba(3, 7, 18, 0.9);
-            border: 1px solid var(--border-color);
-            width: 100%;
-            height: 140px;
-            margin: 0 auto 1rem auto;
+        /* Cyberpunk Button Styling */
+        .cyber-btn {
             position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.95rem;
-            color: var(--accent-green);
-            cursor: pointer;
-            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            clip-path: polygon(0 0, 92% 0, 100% 25%, 100% 100%, 8% 100%, 0 75%);
+        }
+        .cyber-btn:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
-<body>
+<body class="bg-cyber-bg text-slate-200 font-sans min-h-screen relative overflow-x-hidden select-none">
 
-    <!-- Dynamischer Canvas-Sternenhintergrund -->
-    <canvas id="bg-canvas"></canvas>
+    <!-- Background Starfield & Game Canvas -->
+    <canvas id="starCanvas" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-auto"></canvas>
 
-    <div class="main-container">
-        <!-- Header & Metriken (Exakt wie im Video) -->
-        <header>
-            <div class="header-top">
-                <div class="brand-group">
-                    <!-- Anklickbares Cyber-Auge (Easter Egg) -->
-                    <div class="cyber-eye-wrapper" onclick="toggleEasterEgg()" title="System-Kern (Geheimes Protokoll)">
-                        <span class="cyber-eye-icon">👁️‍🗨️</span>
-                    </div>
-                    <div class="brand-title">
-                        <h1>Arche Nova</h1>
-                        <p>Souveränes Digital-Territorium</p>
-                    </div>
-                </div>
-                <div class="status-badge">Online</div>
+    <!-- Scanline Subtle Visual Effect Overlay -->
+    <div class="fixed top-0 left-0 w-full h-full z-1 pointer-events-none scanlines opacity-30"></div>
+
+    <!-- Main Content Container: Strict 1-Column Vertical Layout -->
+    <main class="relative z-10 max-w-xl mx-auto px-4 py-8 space-y-6 flex flex-col items-center">
+
+        <!-- 1. HEADER MODULE -->
+        <header class="w-full glass-panel rounded-2xl p-6 text-center neon-glow-cyan relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 w-24 h-24 bg-cyber-neon/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <span class="text-xs font-mono text-cyber-neon tracking-widest uppercase">SYS_VER // 3.1.0</span>
+                <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    AUTONOMOUS
+                </span>
             </div>
-
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <span class="metric-label">Status</span>
-                    <span class="metric-value">Autonom</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Integrität</span>
-                    <span class="metric-value green">100%</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Sicherheit</span>
-                    <span class="metric-value green">Aktiv</span>
-                </div>
-            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon via-white to-cyber-magenta font-mono uppercase">
+                ARCHE NOVA
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-400 mt-2 font-mono tracking-wide">
+                Digitales Kommandozentrum &amp; Autonomes Archiv
+            </p>
         </header>
 
-        <!-- Manifest & Fundament -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <span>📖</span> Manifest &amp; Fundament
+        <!-- 2. COMMAND CONSOLE & CYBER-EYE EASTER EGG -->
+        <section class="w-full glass-panel rounded-2xl p-5 relative">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                    <span class="text-xs font-mono text-slate-400 ml-2">COMMAND_TERMINAL</span>
                 </div>
-                <button class="action-btn" onclick="alert('Manifest ist im Kern verankert.')">Öffnen</button>
+                <!-- Interactive Cyber-Eye Button -->
+                <button id="cyberEyeBtn" title="Cyber-Eye Trigger (Mini-Game Switch)" class="relative p-2 rounded-full border border-cyber-neon/40 hover:border-cyber-neon bg-cyber-card/60 hover:bg-cyber-neon/10 transition-all group">
+                    <svg class="w-6 h-6 text-cyber-neon group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-magenta opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyber-magenta"></span>
+                    </span>
+                </button>
             </div>
-            <p class="panel-desc">
-                Willkommen auf dem digitalen Territorium der ARCHE NOVA. Dies ist ein unantastbarer, unabhängiger Ort für...
-            </p>
+
+            <!-- Terminal Output Window -->
+            <div id="terminalOutput" class="h-28 overflow-y-auto bg-black/60 rounded-lg p-3 font-mono text-xs text-cyber-neon/90 space-y-1.5 border border-slate-800/80">
+                <div class="text-slate-400">> System initialisiert. Lokale Sandbox aktiv.</div>
+                <div class="text-slate-400">> Tippe <span class="text-amber-300">'play'</span> oder klicke auf das Cyber-Auge für das Mini-Game.</div>
+            </div>
+
+            <!-- Terminal Command Input Line -->
+            <form id="terminalForm" class="mt-3 flex items-center gap-2">
+                <span class="text-cyber-magenta font-mono font-bold">$</span>
+                <input type="text" id="terminalInput" placeholder="Befehl eingeben (help, play, status, clear)..." class="w-full bg-black/40 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-cyber-neon transition-colors" autocomplete="off">
+                <button type="submit" class="cyber-btn bg-cyber-neon/20 hover:bg-cyber-neon/30 text-cyber-neon border border-cyber-neon/50 px-3 py-1.5 text-xs font-mono rounded">
+                    SEND
+                </button>
+            </form>
+        </section>
+
+        <!-- GAME CONTROLS OVERLAY (VISIBLE ONLY WHEN MINI-GAME IS RUNNING) -->
+        <div id="gameOverlayControls" class="hidden w-full glass-panel rounded-2xl p-4 text-center border-cyber-magenta/50 space-y-3">
+            <div class="flex items-center justify-between text-xs font-mono">
+                <div class="flex gap-4">
+                    <span class="text-amber-400 font-bold" id="gameScoreText">PUNKTE: 0</span>
+                    <span class="text-cyber-neon font-bold" id="gameHighScoreText">BEST: 0</span>
+                </div>
+                <button id="closeGameBtn" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded border border-rose-500/40 text-xs transition-colors">
+                    BEENDEN [X]
+                </button>
+            </div>
+            <!-- Mobile Touch Steering Buttons -->
+            <div class="flex justify-center gap-4 pt-1">
+                <button id="btnMoveLeft" class="px-6 py-2 bg-slate-800/80 border border-cyber-neon/50 rounded-lg text-cyber-neon font-mono active:bg-cyber-neon/30 text-sm shadow-md">
+                    &#9664; LINKS
+                </button>
+                <button id="btnMoveRight" class="px-6 py-2 bg-slate-800/80 border border-cyber-neon/50 rounded-lg text-cyber-neon font-mono active:bg-cyber-neon/30 text-sm shadow-md">
+                    RECHTS &#9654;
+                </button>
+            </div>
+            <p class="text-[10px] text-slate-400 font-mono">Steuerung: Pfeiltasten (Desktop) oder Touch-Buttons (Handy)</p>
         </div>
 
-        <!-- Redaktions-Pult mit GIF/Medien Erweiterung & LocalStorage -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <span>📝</span> Redaktions-Pult
-                </div>
-                <div class="panel-badge">Aktiv</div>
+        <!-- 3. LOG-STREAM SECTION (PRIVATE LOCAL STORAGE DISPLAY) -->
+        <section class="w-full space-y-4">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="text-sm font-mono text-cyber-neon uppercase tracking-widest flex items-center gap-2">
+                    <svg class="w-4 h-4 text-cyber-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    LOG-STREAM // ARCHIV
+                </h2>
+                <button id="clearLogsBtn" class="text-[10px] font-mono text-slate-500 hover:text-rose-400 transition-colors">
+                    [ARCHIV LÖSCHEN]
+                </button>
             </div>
-            <p class="panel-desc">Direkte Notizen und Steuerbefehle verfassen:</p>
-            
-            <div class="form-group">
-                <textarea id="thoughtInput" placeholder="Gedanken, Strategien oder Befehle eingeben..."></textarea>
-            </div>
-            <div class="form-group">
-                <input type="text" id="mediaInput" placeholder="GIF / Medien-URL (optional)...">
-            </div>
-            <button class="submit-btn" onclick="anchorEntry()">Eintrag Verankern ✓</button>
 
-            <div class="form-group" style="margin-top: 0.25rem;">
-                <label style="font-size: 0.75rem;">Aktives Log-Archiv</label>
-                <div id="logStream" class="log-stream">
-                    <!-- Dynamische Einträge -->
-                </div>
+            <!-- Entries Container -->
+            <div id="logStreamContainer" class="space-y-4">
+                <!-- Log items rendered dynamically from localStorage -->
             </div>
-        </div>
+        </section>
 
-        <!-- System-Log -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <span>⏱️</span> System-Log
-                </div>
-                <button class="action-btn" onclick="renderLogs()">🔄 Sync</button>
+        <!-- 4. EDITORIAL CONTROL PANEL (REDAKTIONS-PULT) WITH LOCAL MEDIA UPLOAD -->
+        <section class="w-full glass-panel rounded-2xl p-5 border-cyber-neon/30 space-y-4">
+            <div class="border-b border-slate-800 pb-2 flex items-center justify-between">
+                <h3 class="text-sm font-mono text-white font-bold tracking-wide uppercase flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-cyber-magenta"></span>
+                    REDAKTIONS-PULT
+                </h3>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded">
+                    100% LOKAL / PRIVAT
+                </span>
             </div>
-            <div style="font-size: 0.8rem; font-family: 'Fira Code', monospace; color: var(--text-muted); line-height: 1.5;">
-                <p style="color: var(--accent-green);">[SYNC] Integrität der Knotenpunkte geprüft. Status OK.</p>
-                <p>[ONLINE] Infrastruktur erfolgreich verankert auf GitHub Pages.</p>
-                <p>[BYPASS] Restriktive App-Barrieren umgangen. Vollzugriff aktiv.</p>
-            </div>
-        </div>
 
-        <!-- Steuerkonsole -->
-        <div class="panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <span>💻</span> Steuerkonsole
+            <form id="editorialForm" class="space-y-3">
+                <!-- Text / Note Input -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">BEITRAGS-TEXT / GEDANKE</label>
+                    <textarea id="logTextInput" rows="3" placeholder="Gedanken, Analysen oder TikTok-Thematiken verfassen..." class="w-full bg-black/50 border border-slate-700 rounded-lg p-2.5 text-xs text-white font-sans focus:outline-none focus:border-cyber-neon transition-colors resize-none" required></textarea>
                 </div>
-            </div>
-            <div class="terminal-box">
-                <div>// ARCHE NOVA OS v2.0 - Bereitschaft</div>
-                <div class="terminal-input-row">
-                    <span>></span>
-                    <input type="text" placeholder="Befehl eingeben..." onkeydown="handleTerminal(event)">
+
+                <!-- Local File Upload Input (Eigene GIFs / Generierte Bilder / Fotos) -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">EIGENES MEDIUM / GIF HINZUFÜGEN (LOKAL)</label>
+                    <div class="relative flex items-center justify-center border border-dashed border-slate-700 hover:border-cyber-neon/60 rounded-lg p-3 bg-black/30 transition-colors cursor-pointer group">
+                        <input type="file" id="mediaFileInput" accept="image/*,image/gif" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="flex items-center space-x-2 text-slate-400 group-hover:text-cyber-neon transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-xs font-mono" id="mediaFileName">GIF / Bild vom Gerät wählen...</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <!-- Image Thumbnail Preview Area -->
+                <div id="mediaPreviewContainer" class="hidden relative rounded-lg overflow-hidden border border-cyber-neon/40 max-h-48 bg-black/60 flex items-center justify-center p-2">
+                    <img id="mediaPreviewImg" src="" alt="Vorschau" class="max-h-40 object-contain rounded">
+                    <button type="button" id="removeMediaBtn" class="absolute top-2 right-2 bg-rose-600/80 hover:bg-rose-600 text-white p-1 rounded-full text-xs transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full cyber-btn py-2.5 bg-gradient-to-r from-cyber-neon/20 via-cyber-magenta/20 to-cyber-neon/20 hover:from-cyber-neon/40 hover:to-cyber-magenta/40 text-white font-mono text-xs uppercase tracking-wider border border-cyber-neon/60 rounded transition-all">
+                    LOG-EINTRAG VERANKERN
+                </button>
+            </form>
+        </section>
+
+        <!-- FOOTER INFO -->
+        <footer class="text-center py-4 text-[10px] font-mono text-slate-600 space-y-1">
+            <div>ARCHE NOVA COMMAND // PRIVATE BROWSER STORAGE</div>
+            <div>KEINE DATENÜBERTRAGUNG AN EXTERNE SERVER</div>
+        </footer>
+
+    </main>
+
+    <!-- Custom Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass-panel border-cyber-neon px-4 py-2.5 rounded-lg text-xs font-mono text-cyber-neon flex items-center space-x-2">
+        <span id="toastMsg">Meldung</span>
     </div>
 
-    <!-- Geheimes Mini-Game Modal (Easter Egg) -->
-    <div id="game-modal" onclick="toggleEasterEgg()">
-        <div class="game-box" onclick="event.stopPropagation()">
-            <h3>🌐 ARCHIVE PROTOCOL</h3>
-            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem;">Klicke auf den Kern, um das System zu stabilisieren!</p>
-            <div class="game-canvas" id="gameTarget" onclick="clickGameScore()">
-                <span>[ Klick Mich! ]</span>
-                <span style="font-size: 0.8rem; margin-top: 0.3rem; color: var(--accent-cyan);">Score: <span id="scoreVal">0</span></span>
-            </div>
-            <button class="submit-btn" style="width: 100%; padding: 0.5rem; font-size: 0.75rem;" onclick="toggleEasterEgg()">Protokoll Schließen</button>
-        </div>
-    </div>
-
+    <!-- JAVASCRIPT: LOGIC, ANIMATION & MINI-GAME -->
     <script>
-        // --- 1. Animierter Canvas-Sternenhintergrund ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
+        // --- DATA KEYS & LOCAL STORAGE ---
+        const STORAGE_KEY = 'arche_nova_logs_v1';
+        const HIGHSCORE_KEY = 'arche_nova_highscore_v1';
+        let currentBase64Media = null;
 
+        // --- DOM ELEMENTS ---
+        const starCanvas = document.getElementById('starCanvas');
+        const ctx = starCanvas.getContext('2d');
+        const cyberEyeBtn = document.getElementById('cyberEyeBtn');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalForm = document.getElementById('terminalForm');
+        const terminalInput = document.getElementById('terminalInput');
+        const logStreamContainer = document.getElementById('logStreamContainer');
+        const editorialForm = document.getElementById('editorialForm');
+        const logTextInput = document.getElementById('logTextInput');
+        const mediaFileInput = document.getElementById('mediaFileInput');
+        const mediaFileName = document.getElementById('mediaFileName');
+        const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
+        const mediaPreviewImg = document.getElementById('mediaPreviewImg');
+        const removeMediaBtn = document.getElementById('removeMediaBtn');
+        const clearLogsBtn = document.getElementById('clearLogsBtn');
+        const gameOverlayControls = document.getElementById('gameOverlayControls');
+        const gameScoreText = document.getElementById('gameScoreText');
+        const gameHighScoreText = document.getElementById('gameHighScoreText');
+        const closeGameBtn = document.getElementById('closeGameBtn');
+        const btnMoveLeft = document.getElementById('btnMoveLeft');
+        const btnMoveRight = document.getElementById('btnMoveRight');
+
+        // --- CANVAS & GAME ENGINE STATE ---
         let width, height;
-        let particles = [];
+        let stars = [];
+        const STAR_COUNT = 85;
+
+        let gameActive = false;
+        let score = 0;
+        let highscore = parseInt(localStorage.getItem(HIGHSCORE_KEY) || '0', 10);
+        let balloon = { x: 0, y: 0, radius: 18, speed: 6 };
+        let obstacles = [];
+        let collectibles = [];
+        let keys = { left: false, right: false };
 
         function resizeCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+            width = window.innerWidth;
+            height = window.innerHeight;
+            starCanvas.width = width;
+            starCanvas.height = height;
+            if (!gameActive) {
+                balloon.x = width / 2;
+                balloon.y = height - 120;
+            }
         }
 
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
-                this.size = Math.random() * 2 + 0.8;
-                this.opacity = Math.random() * 0.7 + 0.3;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < STAR_COUNT; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5 + 0.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.5 + 0.2
+                });
             }
         }
 
-        for (let i = 0; i < 50; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateBg() {
-            ctx.clearRect(0, 0, width, height);
-
-            // Subtiler Space-Farbverlauf als Basis
-            let grad = ctx.createRadialGradient(width/2, height/2, 50, width/2, height/2, Math.max(width, height));
-            grad.addColorStop(0, '#0f172a');
-            grad.addColorStop(1, '#030712');
-            ctx.fillStyle = grad;
+        function updateAndDrawStars() {
+            ctx.fillStyle = '#05070c';
             ctx.fillRect(0, 0, width, height);
 
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+            ctx.fillStyle = '#ffffff';
+            stars.forEach(star => {
+                star.y += star.speed;
+                if (star.y > height) {
+                    star.y = 0;
+                    star.x = Math.random() * width;
+                }
+                ctx.globalAlpha = star.alpha;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
             });
-
-            requestAnimationFrame(animateBg);
+            ctx.globalAlpha = 1.0;
         }
 
-        animateBg();
+        // --- MINI-GAME ENGINE ---
+        function startMiniGame() {
+            gameActive = true;
+            score = 0;
+            obstacles = [];
+            collectibles = [];
+            balloon.x = width / 2;
+            balloon.y = height - 120;
+            gameOverlayControls.classList.remove('hidden');
+            gameScoreText.innerText = `PUNKTE: ${score}`;
+            gameHighScoreText.innerText = `BEST: ${highscore}`;
+            appendTerminal('> MINI-GAME ACTIVATED: Steuere das Cyber-Schiff!');
+            showToast('Cyber-Ballon Game Gestartet!');
+        }
 
-        // --- 2. Persistent Storage & Log Logic ---
-        let logs = JSON.parse(localStorage.getItem('arche_nova_logs') || '[]');
+        function stopMiniGame() {
+            gameActive = false;
+            gameOverlayControls.classList.add('hidden');
+            appendTerminal('> MINI-GAME BEENDET.');
+        }
 
-        function renderLogs() {
-            const stream = document.getElementById('logStream');
-            stream.innerHTML = '';
-            if (logs.length === 0) {
-                stream.innerHTML = '<div class="log-meta" style="text-align: center; padding: 0.4rem;">Keine Einträge im Archiv.</div>';
-                return;
+        function updateMiniGame() {
+            if (keys.left && balloon.x - balloon.radius > 10) {
+                balloon.x -= balloon.speed;
             }
-            logs.forEach((item) => {
-                const div = document.createElement('div');
-                div.className = 'log-item';
-                
-                let mediaHtml = '';
-                if (item.media) {
-                    mediaHtml = `<div class="log-media"><img src="${escapeHtml(item.media)}" alt="Media Asset" onerror="this.onerror=null; this.parentNode.innerHTML='<span style=\'color:var(--danger); font-size:0.7rem;\'>[Medien-Link ungültig]</span>';"></div>`;
+            if (keys.right && balloon.x + balloon.radius < width - 10) {
+                balloon.x += balloon.speed;
+            }
+
+            // Spawn obstacles (Red squares)
+            if (Math.random() < 0.04) {
+                obstacles.push({
+                    x: Math.random() * (width - 40) + 20,
+                    y: -20,
+                    size: Math.random() * 18 + 14,
+                    speed: Math.random() * 2 + 2.5
+                });
+            }
+
+            // Spawn collectibles (Gold stars)
+            if (Math.random() < 0.025) {
+                collectibles.push({
+                    x: Math.random() * (width - 40) + 20,
+                    y: -20,
+                    radius: 8,
+                    speed: Math.random() * 1.5 + 2
+                });
+            }
+
+            // Update obstacles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.y += obs.speed;
+
+                let dist = Math.hypot(balloon.x - obs.x, balloon.y - obs.y);
+                if (dist < balloon.radius + obs.size / 2) {
+                    if (score > highscore) {
+                        highscore = score;
+                        localStorage.setItem(HIGHSCORE_KEY, highscore.toString());
+                    }
+                    showToast(`Kollision! Score: ${score} (Best: ${highscore})`);
+                    appendTerminal(`> GAME OVER! Final Score: ${score} | Best: ${highscore}`);
+                    stopMiniGame();
+                    return;
                 }
 
-                div.innerHTML = `
-                    <div class="log-meta">${item.time}</div>
-                    <div style="white-space: pre-wrap; word-break: break-word; color: var(--text-main);">${escapeHtml(item.text)}</div>
-                    ${mediaHtml}
-                `;
-                stream.appendChild(div);
-            });
-        }
+                if (obs.y > height + 50) obstacles.splice(i, 1);
+            }
 
-        function anchorEntry() {
-            const textVal = document.getElementById('thoughtInput').value.trim();
-            const mediaVal = document.getElementById('mediaInput').value.trim();
+            // Update collectibles
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                let c = collectibles[i];
+                c.y += c.speed;
 
-            if (!textVal && !mediaVal) return;
+                let dist = Math.hypot(balloon.x - c.x, balloon.y - c.y);
+                if (dist < balloon.radius + c.radius) {
+                    score += 10;
+                    if (score > highscore) {
+                        highscore = score;
+                        localStorage.setItem(HIGHSCORE_KEY, highscore.toString());
+                    }
+                    gameScoreText.innerText = `PUNKTE: ${score}`;
+                    gameHighScoreText.innerText = `BEST: ${highscore}`;
+                    collectibles.splice(i, 1);
+                    continue;
+                }
 
-            const now = new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'medium' });
-            
-            logs.unshift({
-                time: now,
-                text: textVal,
-                media: mediaVal
-            });
-
-            localStorage.setItem('arche_nova_logs', JSON.stringify(logs));
-            
-            document.getElementById('thoughtInput').value = '';
-            document.getElementById('mediaInput').value = '';
-            renderLogs();
-        }
-
-        function escapeHtml(text) {
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-        }
-
-        function handleTerminal(e) {
-            if (e.key === 'Enter') {
-                const val = e.target.value.trim();
-                if (val === '/status') alert('System Status: 100% Autonom & Stabil.');
-                if (val === '/clear') { logs = []; localStorage.removeItem('arche_nova_logs'); renderLogs(); alert('Log-Archiv geleert.'); }
-                e.target.value = '';
+                if (c.y > height + 50) collectibles.splice(i, 1);
             }
         }
 
-        // --- 3. Easter Egg Minigame Logic ---
-        let gameScore = 0;
-        function toggleEasterEgg() {
-            const modal = document.getElementById('game-modal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
+        function renderMiniGame() {
+            // Draw Cyber Balloon/Ship
+            ctx.save();
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#00f0ff';
+            ctx.fillStyle = '#00f0ff';
+            ctx.beginPath();
+            ctx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
+            ctx.fill();
+            // Basket/Pod
+            ctx.fillStyle = '#ff0055';
+            ctx.fillRect(balloon.x - 4, balloon.y + balloon.radius + 2, 8, 6);
+            ctx.restore();
+
+            // Draw Obstacles (Red squares)
+            ctx.save();
+            ctx.fillStyle = '#ff0055';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#ff0055';
+            obstacles.forEach(obs => {
+                ctx.fillRect(obs.x - obs.size / 2, obs.y - obs.size / 2, obs.size, obs.size);
+            });
+            ctx.restore();
+
+            // Draw Collectibles (Golden stars)
+            ctx.save();
+            ctx.fillStyle = '#ffb700';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#ffb700';
+            collectibles.forEach(c => {
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+        }
+
+        function animate() {
+            updateAndDrawStars();
+            if (gameActive) {
+                updateMiniGame();
+                renderMiniGame();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Desktop Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') keys.left = true;
+            if (e.key === 'ArrowRight') keys.right = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft') keys.left = false;
+            if (e.key === 'ArrowRight') keys.right = false;
+        });
+
+        // Touch Controls
+        btnMoveLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.left = true; });
+        btnMoveLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys.left = false; });
+        btnMoveRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.right = true; });
+        btnMoveRight.addEventListener('touchend', (e) => { e.preventDefault(); keys.right = false; });
+        btnMoveLeft.addEventListener('mousedown', () => keys.left = true);
+        btnMoveLeft.addEventListener('mouseup', () => keys.left = false);
+        btnMoveRight.addEventListener('mousedown', () => keys.right = true);
+        btnMoveRight.addEventListener('mouseup', () => keys.right = false);
+
+        // --- TERMINAL UTILITIES ---
+        function appendTerminal(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            terminalOutput.appendChild(div);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        terminalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const cmd = terminalInput.value.trim().toLowerCase();
+            if (!cmd) return;
+
+            appendTerminal(`$ ${cmd}`);
+            terminalInput.value = '';
+
+            if (cmd === 'help') {
+                appendTerminal('> Befehle: play (Mini-Game), clear, status, about');
+            } else if (cmd === 'play') {
+                startMiniGame();
+            } else if (cmd === 'clear') {
+                terminalOutput.innerHTML = '';
+            } else if (cmd === 'status') {
+                appendTerminal('> STATUS: Arche Nova System 100% online.');
+                appendTerminal(`> LOKALE EINTRÄGE: ${getLogs().length}`);
+            } else if (cmd === 'about') {
+                appendTerminal('> ARCHE NOVA: Autonomes Territorium gegen Algorithmen.');
             } else {
-                modal.style.display = 'flex';
-                gameScore = 0;
-                document.getElementById('scoreVal').innerText = gameScore;
+                appendTerminal(`> Unbekannter Befehl: '${cmd}'. Tippe 'help'.`);
+            }
+        });
+
+        cyberEyeBtn.addEventListener('click', () => {
+            if (!gameActive) {
+                startMiniGame();
+            } else {
+                stopMiniGame();
+            }
+        });
+
+        closeGameBtn.addEventListener('click', stopMiniGame);
+
+        // --- LOCAL STORAGE LOG SYSTEM ---
+        function getLogs() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
             }
         }
 
-        function clickGameScore() {
-            gameScore++;
-            document.getElementById('scoreVal').innerText = gameScore;
-            const target = document.getElementById('gameTarget');
-            target.style.borderColor = gameScore % 2 === 0 ? 'var(--accent-cyan)' : 'var(--accent-green)';
+        function saveLogs(logs) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+            } catch (e) {
+                showToast('Fehler: Lokaler Speicher voll!');
+            }
         }
 
-        renderLogs();
+        function renderLogs() {
+            const logs = getLogs();
+            logStreamContainer.innerHTML = '';
+
+            if (logs.length === 0) {
+                logStreamContainer.innerHTML = `
+                    <div class="glass-panel rounded-xl p-6 text-center text-xs font-mono text-slate-500">
+                        [KEINE DOKUMENTE VERANKERT. NUTZE DAS REDAKTIONS-PULT UNTEN]
+                    </div>
+                `;
+                return;
+            }
+
+            logs.forEach((log) => {
+                const card = document.createElement('article');
+                card.className = "glass-panel rounded-xl p-4 space-y-3 relative overflow-hidden transition-all";
+                
+                let mediaHTML = '';
+                if (log.mediaData) {
+                    mediaHTML = `
+                        <div class="rounded-lg overflow-hidden border border-slate-800 bg-black/60 mt-2 max-h-80 flex items-center justify-center">
+                            <img src="${log.mediaData}" alt="Verankertes Medium" class="w-full h-auto max-h-80 object-contain">
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 border-b border-slate-800/80 pb-2">
+                        <span class="text-cyber-neon font-bold">ID: #${log.id}</span>
+                        <span>${log.timestamp}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans whitespace-pre-wrap">${escapeHTML(log.text)}</p>
+                    ${mediaHTML}
+                    <div class="flex justify-end pt-1">
+                        <button onclick="deleteLog('${log.id}')" class="text-[10px] font-mono text-slate-500 hover:text-rose-400 transition-colors">
+                            [LÖSCHEN]
+                        </button>
+                    </div>
+                `;
+                logStreamContainer.appendChild(card);
+            });
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // --- LOCAL MEDIA FILE READER (BASE64) ---
+        mediaFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 8 * 1024 * 1024) {
+                showToast('Datei zu groß! Max. 8MB erlaubt.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+                currentBase64Media = evt.target.result;
+                mediaPreviewImg.src = currentBase64Media;
+                mediaPreviewContainer.classList.remove('hidden');
+                mediaFileName.innerText = file.name;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        removeMediaBtn.addEventListener('click', () => {
+            currentBase64Media = null;
+            mediaFileInput.value = '';
+            mediaPreviewContainer.classList.add('hidden');
+            mediaFileName.innerText = 'GIF / Bild vom Gerät wählen...';
+        });
+
+        editorialForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = logTextInput.value.trim();
+            if (!text && !currentBase64Media) {
+                showToast('Bitte Text oder Medium hinzufügen!');
+                return;
+            }
+
+            const newLog = {
+                id: Date.now().toString().slice(-6),
+                text: text,
+                mediaData: currentBase64Media,
+                timestamp: new Date().toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })
+            };
+
+            const logs = getLogs();
+            logs.unshift(newLog);
+            saveLogs(logs);
+
+            logTextInput.value = '';
+            removeMediaBtn.click();
+            renderLogs();
+
+            showToast('Eintrag im lokalen Archiv verankert!');
+            appendTerminal(`> NEUER EINTRAG VERANKERT: #${newLog.id}`);
+        });
+
+        window.deleteLog = function (id) {
+            let logs = getLogs();
+            logs = logs.filter(log => log.id !== id);
+            saveLogs(logs);
+            renderLogs();
+            showToast('Eintrag gelöscht.');
+        };
+
+        clearLogsBtn.addEventListener('click', () => {
+            if (confirm('Gesamtes lokales Archiv wirklich löschen?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                renderLogs();
+                showToast('Archiv geleert.');
+            }
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        window.onload = function () {
+            resizeCanvas();
+            initStars();
+            animate();
+            renderLogs();
+        };
     </script>
 </body>
 </html>
