@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCHE NOVA // Autonomous Digital Command</title>
+    <title>ARCHE NOVA // Autonomes Digitales Kommandozentrum</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -31,7 +31,7 @@
         }
     </script>
     <style>
-        /* Custom scrollbar styling */
+        /* Benutzerdefiniertes Scrollbar-Design */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -46,7 +46,7 @@
             background: #00f0ff;
         }
 
-        /* Glassmorphism panel styling */
+        /* Glassmorphism-Panel Stil */
         .glass-panel {
             background: rgba(10, 15, 29, 0.85);
             backdrop-filter: blur(12px);
@@ -59,7 +59,7 @@
             border-color: rgba(0, 240, 255, 0.4);
         }
 
-        /* Neon glow classes */
+        /* Neon-Leuchteffekte */
         .neon-glow-cyan {
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
         }
@@ -67,7 +67,7 @@
             box-shadow: 0 0 20px rgba(255, 0, 85, 0.25);
         }
 
-        /* Scanline Overlay Effect */
+        /* Scanline CRT Effekt */
         .scanlines {
             background: linear-gradient(
                 rgba(18, 16, 16, 0) 50%, 
@@ -76,7 +76,7 @@
             background-size: 100% 4px;
         }
 
-        /* Cyberpunk Button Styling */
+        /* Cyberpunk Button Stil */
         .cyber-btn {
             position: relative;
             transition: all 0.2s ease-in-out;
@@ -89,23 +89,23 @@
 </head>
 <body class="bg-cyber-bg text-slate-200 font-sans min-h-screen relative overflow-x-hidden select-none">
 
-    <!-- Background Starfield & Game Canvas -->
-    <canvas id="starCanvas" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-auto"></canvas>
+    <!-- Animierter Sternenhimmel-Hintergrund -->
+    <canvas id="starCanvas" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas>
 
-    <!-- Scanline Subtle Visual Effect Overlay -->
+    <!-- Subtiler Scanline-Effekt -->
     <div class="fixed top-0 left-0 w-full h-full z-1 pointer-events-none scanlines opacity-30"></div>
 
-    <!-- Main Content Container: Strict 1-Column Vertical Layout -->
-    <main class="relative z-10 max-w-xl mx-auto px-4 py-8 space-y-6 flex flex-col items-center">
+    <!-- Hauptbereich: Striktestes vertikales 1-Spalten-Layout -->
+    <main id="mainContent" class="relative z-10 max-w-xl mx-auto px-4 py-8 space-y-6 flex flex-col items-center transition-opacity duration-300">
 
-        <!-- 1. HEADER MODULE -->
+        <!-- 1. KOPFZEILE / HEADER -->
         <header class="w-full glass-panel rounded-2xl p-6 text-center neon-glow-cyan relative overflow-hidden">
             <div class="absolute -top-10 -left-10 w-24 h-24 bg-cyber-neon/10 rounded-full blur-xl pointer-events-none"></div>
             <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-                <span class="text-xs font-mono text-cyber-neon tracking-widest uppercase">SYS_VER // 3.1.0</span>
+                <span class="text-xs font-mono text-cyber-neon tracking-widest uppercase">SYS_VER // 3.2.0</span>
                 <span class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    AUTONOMOUS
+                    AUTONOM
                 </span>
             </div>
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyber-neon via-white to-cyber-magenta font-mono uppercase">
@@ -116,17 +116,17 @@
             </p>
         </header>
 
-        <!-- 2. COMMAND CONSOLE & CYBER-EYE EASTER EGG -->
+        <!-- 2. BEFEHLSKONSOLE & CYBER-AUGE EASTER EGG -->
         <section class="w-full glass-panel rounded-2xl p-5 relative">
             <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center space-x-2">
                     <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
                     <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
                     <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
-                    <span class="text-xs font-mono text-slate-400 ml-2">COMMAND_TERMINAL</span>
+                    <span class="text-xs font-mono text-slate-400 ml-2">BEFEHLS_TERMINAL</span>
                 </div>
-                <!-- Interactive Cyber-Eye Button -->
-                <button id="cyberEyeBtn" title="Cyber-Eye Trigger (Mini-Game Switch)" class="relative p-2 rounded-full border border-cyber-neon/40 hover:border-cyber-neon bg-cyber-card/60 hover:bg-cyber-neon/10 transition-all group">
+                <!-- Interaktiver Cyber-Auge Button -->
+                <button id="cyberEyeBtn" title="Cyber-Auge aktivieren (Spiel-Fenster öffnen)" class="relative p-2 rounded-full border border-cyber-neon/40 hover:border-cyber-neon bg-cyber-card/60 hover:bg-cyber-neon/10 transition-all group">
                     <svg class="w-6 h-6 text-cyber-neon group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -138,46 +138,23 @@
                 </button>
             </div>
 
-            <!-- Terminal Output Window -->
+            <!-- Terminal Ausgabefenster -->
             <div id="terminalOutput" class="h-28 overflow-y-auto bg-black/60 rounded-lg p-3 font-mono text-xs text-cyber-neon/90 space-y-1.5 border border-slate-800/80">
                 <div class="text-slate-400">> System initialisiert. Lokale Sandbox aktiv.</div>
-                <div class="text-slate-400">> Tippe <span class="text-amber-300">'play'</span> oder klicke auf das Cyber-Auge für das Mini-Game.</div>
+                <div class="text-slate-400">> Tippe <span class="text-amber-300">'spiel'</span> oder klicke das Cyber-Auge für das Mini-Game.</div>
             </div>
 
-            <!-- Terminal Command Input Line -->
+            <!-- Terminal Eingabezeile -->
             <form id="terminalForm" class="mt-3 flex items-center gap-2">
                 <span class="text-cyber-magenta font-mono font-bold">$</span>
-                <input type="text" id="terminalInput" placeholder="Befehl eingeben (help, play, status, clear)..." class="w-full bg-black/40 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-cyber-neon transition-colors" autocomplete="off">
-                <button type="submit" class="cyber-btn bg-cyber-neon/20 hover:bg-cyber-neon/30 text-cyber-neon border border-cyber-neon/50 px-3 py-1.5 text-xs font-mono rounded">
-                    SEND
+                <input type="text" id="terminalInput" placeholder="Befehl eingeben (hilfe, spiel, status, leeren)..." class="w-full bg-black/40 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs font-mono text-white focus:outline-none focus:border-cyber-neon transition-colors" autocomplete="off">
+                <button type="submit" class="cyber-btn bg-cyber-neon/20 hover:bg-cyber-neon/30 text-cyber-neon border border-cyber-neon/50 px-3 py-1.5 text-xs font-mono rounded uppercase">
+                    SENDEN
                 </button>
             </form>
         </section>
 
-        <!-- GAME CONTROLS OVERLAY (VISIBLE ONLY WHEN MINI-GAME IS RUNNING) -->
-        <div id="gameOverlayControls" class="hidden w-full glass-panel rounded-2xl p-4 text-center border-cyber-magenta/50 space-y-3">
-            <div class="flex items-center justify-between text-xs font-mono">
-                <div class="flex gap-4">
-                    <span class="text-amber-400 font-bold" id="gameScoreText">PUNKTE: 0</span>
-                    <span class="text-cyber-neon font-bold" id="gameHighScoreText">BEST: 0</span>
-                </div>
-                <button id="closeGameBtn" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded border border-rose-500/40 text-xs transition-colors">
-                    BEENDEN [X]
-                </button>
-            </div>
-            <!-- Mobile Touch Steering Buttons -->
-            <div class="flex justify-center gap-4 pt-1">
-                <button id="btnMoveLeft" class="px-6 py-2 bg-slate-800/80 border border-cyber-neon/50 rounded-lg text-cyber-neon font-mono active:bg-cyber-neon/30 text-sm shadow-md">
-                    &#9664; LINKS
-                </button>
-                <button id="btnMoveRight" class="px-6 py-2 bg-slate-800/80 border border-cyber-neon/50 rounded-lg text-cyber-neon font-mono active:bg-cyber-neon/30 text-sm shadow-md">
-                    RECHTS &#9654;
-                </button>
-            </div>
-            <p class="text-[10px] text-slate-400 font-mono">Steuerung: Pfeiltasten (Desktop) oder Touch-Buttons (Handy)</p>
-        </div>
-
-        <!-- 3. LOG-STREAM SECTION (PRIVATE LOCAL STORAGE DISPLAY) -->
+        <!-- 3. LOG-STREAM BEREICH (LOKALER ARCHIV-SPEICHER) -->
         <section class="w-full space-y-4">
             <div class="flex items-center justify-between px-1">
                 <h2 class="text-sm font-mono text-cyber-neon uppercase tracking-widest flex items-center gap-2">
@@ -191,13 +168,13 @@
                 </button>
             </div>
 
-            <!-- Entries Container -->
+            <!-- Beitrags-Container -->
             <div id="logStreamContainer" class="space-y-4">
-                <!-- Log items rendered dynamically from localStorage -->
+                <!-- Log-Einträge werden dynamisch aus dem localStorage gerendert -->
             </div>
         </section>
 
-        <!-- 4. EDITORIAL CONTROL PANEL (REDAKTIONS-PULT) WITH LOCAL MEDIA UPLOAD -->
+        <!-- 4. REDAKTIONSPULT MIT LOKALEM MEDIEN-UPLOAD (BASE64) -->
         <section class="w-full glass-panel rounded-2xl p-5 border-cyber-neon/30 space-y-4">
             <div class="border-b border-slate-800 pb-2 flex items-center justify-between">
                 <h3 class="text-sm font-mono text-white font-bold tracking-wide uppercase flex items-center gap-2">
@@ -210,13 +187,13 @@
             </div>
 
             <form id="editorialForm" class="space-y-3">
-                <!-- Text / Note Input -->
+                <!-- Texteingabe -->
                 <div>
                     <label class="block text-xs font-mono text-slate-400 mb-1">BEITRAGS-TEXT / GEDANKE</label>
                     <textarea id="logTextInput" rows="3" placeholder="Gedanken, Analysen oder TikTok-Thematiken verfassen..." class="w-full bg-black/50 border border-slate-700 rounded-lg p-2.5 text-xs text-white font-sans focus:outline-none focus:border-cyber-neon transition-colors resize-none" required></textarea>
                 </div>
 
-                <!-- Local File Upload Input (Eigene GIFs / Generierte Bilder / Fotos) -->
+                <!-- Dateiupload für GIFs/Bilder -->
                 <div>
                     <label class="block text-xs font-mono text-slate-400 mb-1">EIGENES MEDIUM / GIF HINZUFÜGEN (LOKAL)</label>
                     <div class="relative flex items-center justify-center border border-dashed border-slate-700 hover:border-cyber-neon/60 rounded-lg p-3 bg-black/30 transition-colors cursor-pointer group">
@@ -230,7 +207,7 @@
                     </div>
                 </div>
 
-                <!-- Image Thumbnail Preview Area -->
+                <!-- Bild-Vorschau Bereich -->
                 <div id="mediaPreviewContainer" class="hidden relative rounded-lg overflow-hidden border border-cyber-neon/40 max-h-48 bg-black/60 flex items-center justify-center p-2">
                     <img id="mediaPreviewImg" src="" alt="Vorschau" class="max-h-40 object-contain rounded">
                     <button type="button" id="removeMediaBtn" class="absolute top-2 right-2 bg-rose-600/80 hover:bg-rose-600 text-white p-1 rounded-full text-xs transition-colors">
@@ -240,36 +217,78 @@
                     </button>
                 </div>
 
-                <!-- Submit Button -->
+                <!-- Absende-Button -->
                 <button type="submit" class="w-full cyber-btn py-2.5 bg-gradient-to-r from-cyber-neon/20 via-cyber-magenta/20 to-cyber-neon/20 hover:from-cyber-neon/40 hover:to-cyber-magenta/40 text-white font-mono text-xs uppercase tracking-wider border border-cyber-neon/60 rounded transition-all">
                     LOG-EINTRAG VERANKERN
                 </button>
             </form>
         </section>
 
-        <!-- FOOTER INFO -->
+        <!-- FUSSZEILE -->
         <footer class="text-center py-4 text-[10px] font-mono text-slate-600 space-y-1">
-            <div>ARCHE NOVA COMMAND // PRIVATE BROWSER STORAGE</div>
+            <div>ARCHE NOVA KOMMANDOZENTRALE // LOKALER BROWSER-SPEICHER</div>
             <div>KEINE DATENÜBERTRAGUNG AN EXTERNE SERVER</div>
         </footer>
 
     </main>
 
-    <!-- Custom Notification Toast -->
+    <!-- SAUBERES VOLLBILD SPIEL-MODAL -->
+    <div id="gameModal" class="fixed inset-0 z-50 hidden bg-cyber-bg/95 backdrop-blur-xl flex flex-col items-center justify-between p-4 sm:p-6 transition-all duration-300">
+        
+        <!-- Modal Kopfzeile -->
+        <div class="w-full max-w-xl flex items-center justify-between border-b border-cyber-neon/30 pb-3 z-10">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyber-neon animate-pulse"></span>
+                <span class="text-xs font-mono font-bold text-cyber-neon tracking-widest uppercase">CYBER-BALLON // ARCADE</span>
+            </div>
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <span class="text-xs font-mono text-amber-400 font-bold" id="gameScoreText">PUNKTE: 0</span>
+                <span class="text-xs font-mono text-cyber-neon font-bold" id="gameHighScoreText">REKORD: 0</span>
+                <button id="closeGameBtn" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded border border-rose-500/50 text-xs font-mono transition-colors">
+                    SCHLIESSEN [X]
+                </button>
+            </div>
+        </div>
+
+        <!-- Spiel Canvas Container -->
+        <div class="relative w-full max-w-xl flex-1 my-4 rounded-2xl border border-cyber-neon/40 overflow-hidden shadow-2xl bg-black/80 flex items-center justify-center">
+            <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+        </div>
+
+        <!-- Touch-Steuerung & Hilfetext -->
+        <div class="w-full max-w-xl flex flex-col items-center space-y-2 z-10">
+            <div class="flex justify-center gap-6 w-full">
+                <button id="btnMoveLeft" class="flex-1 max-w-[160px] py-3 bg-slate-800/90 border border-cyber-neon/60 rounded-xl text-cyber-neon font-mono font-bold active:bg-cyber-neon/40 text-sm shadow-lg text-center select-none">
+                    &#9664; LINKS
+                </button>
+                <button id="btnMoveRight" class="flex-1 max-w-[160px] py-3 bg-slate-800/90 border border-cyber-neon/60 rounded-xl text-cyber-neon font-mono font-bold active:bg-cyber-neon/40 text-sm shadow-lg text-center select-none">
+                    RECHTS &#9654;
+                </button>
+            </div>
+            <p class="text-[11px] text-slate-400 font-mono">Pfeiltasten / A & D (Desktop) oder Touch-Buttons (Handy)</p>
+        </div>
+    </div>
+
+    <!-- Benachrichtigungs-Toast -->
     <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none glass-panel border-cyber-neon px-4 py-2.5 rounded-lg text-xs font-mono text-cyber-neon flex items-center space-x-2">
         <span id="toastMsg">Meldung</span>
     </div>
 
-    <!-- JAVASCRIPT: LOGIC, ANIMATION & MINI-GAME -->
+    <!-- JAVASCRIPT: LOGIK, STERNENHIMMEL & ARCADE-GAME -->
     <script>
-        // --- DATA KEYS & LOCAL STORAGE ---
+        // --- SPEICHER-SCHLÜSSEL ---
         const STORAGE_KEY = 'arche_nova_logs_v1';
         const HIGHSCORE_KEY = 'arche_nova_highscore_v1';
         let currentBase64Media = null;
 
-        // --- DOM ELEMENTS ---
+        // --- DOM ELEMENTE ---
         const starCanvas = document.getElementById('starCanvas');
-        const ctx = starCanvas.getContext('2d');
+        const starCtx = starCanvas.getContext('2d');
+        const gameCanvas = document.getElementById('gameCanvas');
+        const gameCtx = gameCanvas.getContext('2d');
+
+        const mainContent = document.getElementById('mainContent');
+        const gameModal = document.getElementById('gameModal');
         const cyberEyeBtn = document.getElementById('cyberEyeBtn');
         const terminalOutput = document.getElementById('terminalOutput');
         const terminalForm = document.getElementById('terminalForm');
@@ -283,45 +302,31 @@
         const mediaPreviewImg = document.getElementById('mediaPreviewImg');
         const removeMediaBtn = document.getElementById('removeMediaBtn');
         const clearLogsBtn = document.getElementById('clearLogsBtn');
-        const gameOverlayControls = document.getElementById('gameOverlayControls');
+
         const gameScoreText = document.getElementById('gameScoreText');
         const gameHighScoreText = document.getElementById('gameHighScoreText');
         const closeGameBtn = document.getElementById('closeGameBtn');
         const btnMoveLeft = document.getElementById('btnMoveLeft');
         const btnMoveRight = document.getElementById('btnMoveRight');
 
-        // --- CANVAS & GAME ENGINE STATE ---
-        let width, height;
+        // --- STERNENHIMMEL-ENGINE ---
+        let bgWidth, bgHeight;
         let stars = [];
         const STAR_COUNT = 85;
 
-        let gameActive = false;
-        let score = 0;
-        let highscore = parseInt(localStorage.getItem(HIGHSCORE_KEY) || '0', 10);
-        let balloon = { x: 0, y: 0, radius: 18, speed: 6 };
-        let obstacles = [];
-        let collectibles = [];
-        let keys = { left: false, right: false };
-
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            starCanvas.width = width;
-            starCanvas.height = height;
-            if (!gameActive) {
-                balloon.x = width / 2;
-                balloon.y = height - 120;
-            }
+        function resizeStarCanvas() {
+            bgWidth = window.innerWidth;
+            bgHeight = window.innerHeight;
+            starCanvas.width = bgWidth;
+            starCanvas.height = bgHeight;
         }
-
-        window.addEventListener('resize', resizeCanvas);
 
         function initStars() {
             stars = [];
             for (let i = 0; i < STAR_COUNT; i++) {
                 stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
+                    x: Math.random() * bgWidth,
+                    y: Math.random() * bgHeight,
                     radius: Math.random() * 1.5 + 0.5,
                     alpha: Math.random(),
                     speed: Math.random() * 0.5 + 0.2
@@ -329,75 +334,109 @@
             }
         }
 
-        function updateAndDrawStars() {
-            ctx.fillStyle = '#05070c';
-            ctx.fillRect(0, 0, width, height);
+        function animateBackground() {
+            starCtx.fillStyle = '#05070c';
+            starCtx.fillRect(0, 0, bgWidth, bgHeight);
 
-            ctx.fillStyle = '#ffffff';
+            starCtx.fillStyle = '#ffffff';
             stars.forEach(star => {
                 star.y += star.speed;
-                if (star.y > height) {
+                if (star.y > bgHeight) {
                     star.y = 0;
-                    star.x = Math.random() * width;
+                    star.x = Math.random() * bgWidth;
                 }
-                ctx.globalAlpha = star.alpha;
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fill();
+                starCtx.globalAlpha = star.alpha;
+                starCtx.beginPath();
+                starCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                starCtx.fill();
             });
-            ctx.globalAlpha = 1.0;
+            starCtx.globalAlpha = 1.0;
+            requestAnimationFrame(animateBackground);
         }
 
         // --- MINI-GAME ENGINE ---
+        let gWidth, gHeight;
+        let gameActive = false;
+        let score = 0;
+        let highscore = parseInt(localStorage.getItem(HIGHSCORE_KEY) || '0', 10);
+        let balloon = { x: 0, y: 0, radius: 18, speed: 6 };
+        let obstacles = [];
+        let collectibles = [];
+        let keys = { left: false, right: false };
+        let gameAnimationId = null;
+
+        function resizeGameCanvas() {
+            if (!gameCanvas.parentElement) return;
+            gWidth = gameCanvas.parentElement.clientWidth;
+            gHeight = gameCanvas.parentElement.clientHeight;
+            gameCanvas.width = gWidth;
+            gameCanvas.height = gHeight;
+            if (balloon.x === 0) {
+                balloon.x = gWidth / 2;
+                balloon.y = gHeight - 80;
+            }
+        }
+
         function startMiniGame() {
             gameActive = true;
             score = 0;
             obstacles = [];
             collectibles = [];
-            balloon.x = width / 2;
-            balloon.y = height - 120;
-            gameOverlayControls.classList.remove('hidden');
+            
+            gameModal.classList.remove('hidden');
+            mainContent.classList.add('opacity-10');
+
+            resizeGameCanvas();
+            balloon.x = gWidth / 2;
+            balloon.y = gHeight - 80;
+
             gameScoreText.innerText = `PUNKTE: ${score}`;
-            gameHighScoreText.innerText = `BEST: ${highscore}`;
-            appendTerminal('> MINI-GAME ACTIVATED: Steuere das Cyber-Schiff!');
-            showToast('Cyber-Ballon Game Gestartet!');
+            gameHighScoreText.innerText = `REKORD: ${highscore}`;
+            
+            appendTerminal('> SPIEL-FENSTER GEÖFFNET: Cyber-Ballon gestartet!');
+            showToast('Cyber-Ballon gestartet!');
+
+            if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+            runGameLoop();
         }
 
         function stopMiniGame() {
             gameActive = false;
-            gameOverlayControls.classList.add('hidden');
-            appendTerminal('> MINI-GAME BEENDET.');
+            gameModal.classList.add('hidden');
+            mainContent.classList.remove('opacity-10');
+            if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+            appendTerminal('> SPIEL-FENSTER GESCHLOSSEN.');
         }
 
         function updateMiniGame() {
             if (keys.left && balloon.x - balloon.radius > 10) {
                 balloon.x -= balloon.speed;
             }
-            if (keys.right && balloon.x + balloon.radius < width - 10) {
+            if (keys.right && balloon.x + balloon.radius < gWidth - 10) {
                 balloon.x += balloon.speed;
             }
 
-            // Spawn obstacles (Red squares)
+            // Hindernisse erzeugen (Roter Algorithmen-Müll)
             if (Math.random() < 0.04) {
                 obstacles.push({
-                    x: Math.random() * (width - 40) + 20,
+                    x: Math.random() * (gWidth - 40) + 20,
                     y: -20,
                     size: Math.random() * 18 + 14,
                     speed: Math.random() * 2 + 2.5
                 });
             }
 
-            // Spawn collectibles (Gold stars)
+            // Sammelobjekte erzeugen (Goldene Sterne)
             if (Math.random() < 0.025) {
                 collectibles.push({
-                    x: Math.random() * (width - 40) + 20,
+                    x: Math.random() * (gWidth - 40) + 20,
                     y: -20,
                     radius: 8,
                     speed: Math.random() * 1.5 + 2
                 });
             }
 
-            // Update obstacles
+            // Hindernisse aktualisieren
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 let obs = obstacles[i];
                 obs.y += obs.speed;
@@ -408,16 +447,16 @@
                         highscore = score;
                         localStorage.setItem(HIGHSCORE_KEY, highscore.toString());
                     }
-                    showToast(`Kollision! Score: ${score} (Best: ${highscore})`);
-                    appendTerminal(`> GAME OVER! Final Score: ${score} | Best: ${highscore}`);
+                    showToast(`Kollision! Punkte: ${score} (Rekord: ${highscore})`);
+                    appendTerminal(`> GAME OVER! Endpunktzahl: ${score} | Rekord: ${highscore}`);
                     stopMiniGame();
                     return;
                 }
 
-                if (obs.y > height + 50) obstacles.splice(i, 1);
+                if (obs.y > gHeight + 50) obstacles.splice(i, 1);
             }
 
-            // Update collectibles
+            // Sterne aktualisieren
             for (let i = collectibles.length - 1; i >= 0; i--) {
                 let c = collectibles[i];
                 c.y += c.speed;
@@ -430,72 +469,90 @@
                         localStorage.setItem(HIGHSCORE_KEY, highscore.toString());
                     }
                     gameScoreText.innerText = `PUNKTE: ${score}`;
-                    gameHighScoreText.innerText = `BEST: ${highscore}`;
+                    gameHighScoreText.innerText = `REKORD: ${highscore}`;
                     collectibles.splice(i, 1);
                     continue;
                 }
 
-                if (c.y > height + 50) collectibles.splice(i, 1);
+                if (c.y > gHeight + 50) collectibles.splice(i, 1);
             }
         }
 
         function renderMiniGame() {
-            // Draw Cyber Balloon/Ship
-            ctx.save();
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = '#00f0ff';
-            ctx.fillStyle = '#00f0ff';
-            ctx.beginPath();
-            ctx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
-            ctx.fill();
-            // Basket/Pod
-            ctx.fillStyle = '#ff0055';
-            ctx.fillRect(balloon.x - 4, balloon.y + balloon.radius + 2, 8, 6);
-            ctx.restore();
+            gameCtx.fillStyle = '#0a0f1d';
+            gameCtx.fillRect(0, 0, gWidth, gHeight);
 
-            // Draw Obstacles (Red squares)
-            ctx.save();
-            ctx.fillStyle = '#ff0055';
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = '#ff0055';
-            obstacles.forEach(obs => {
-                ctx.fillRect(obs.x - obs.size / 2, obs.y - obs.size / 2, obs.size, obs.size);
-            });
-            ctx.restore();
-
-            // Draw Collectibles (Golden stars)
-            ctx.save();
-            ctx.fillStyle = '#ffb700';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#ffb700';
-            collectibles.forEach(c => {
-                ctx.beginPath();
-                ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            ctx.restore();
-        }
-
-        function animate() {
-            updateAndDrawStars();
-            if (gameActive) {
-                updateMiniGame();
-                renderMiniGame();
+            // Raster-Linien
+            gameCtx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+            gameCtx.lineWidth = 1;
+            for (let x = 0; x < gWidth; x += 30) {
+                gameCtx.beginPath();
+                gameCtx.moveTo(x, 0);
+                gameCtx.lineTo(x, gHeight);
+                gameCtx.stroke();
             }
-            requestAnimationFrame(animate);
+            for (let y = 0; y < gHeight; y += 30) {
+                gameCtx.beginPath();
+                gameCtx.moveTo(0, y);
+                gameCtx.lineTo(gWidth, y);
+                gameCtx.stroke();
+            }
+
+            // Ballon / Cyber-Schiff
+            gameCtx.save();
+            gameCtx.shadowBlur = 15;
+            gameCtx.shadowColor = '#00f0ff';
+            gameCtx.fillStyle = '#00f0ff';
+            gameCtx.beginPath();
+            gameCtx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
+            gameCtx.fill();
+            // Gondel
+            gameCtx.fillStyle = '#ff0055';
+            gameCtx.fillRect(balloon.x - 4, balloon.y + balloon.radius + 2, 8, 6);
+            gameCtx.restore();
+
+            // Hindernisse (Rote Quadrate)
+            gameCtx.save();
+            gameCtx.fillStyle = '#ff0055';
+            gameCtx.shadowBlur = 8;
+            gameCtx.shadowColor = '#ff0055';
+            obstacles.forEach(obs => {
+                gameCtx.fillRect(obs.x - obs.size / 2, obs.y - obs.size / 2, obs.size, obs.size);
+            });
+            gameCtx.restore();
+
+            // Sterne (Goldene Kreise)
+            gameCtx.save();
+            gameCtx.fillStyle = '#ffb700';
+            gameCtx.shadowBlur = 10;
+            gameCtx.shadowColor = '#ffb700';
+            collectibles.forEach(c => {
+                gameCtx.beginPath();
+                gameCtx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+                gameCtx.fill();
+            });
+            gameCtx.restore();
         }
 
-        // Desktop Controls
+        function runGameLoop() {
+            if (!gameActive) return;
+            updateMiniGame();
+            renderMiniGame();
+            gameAnimationId = requestAnimationFrame(runGameLoop);
+        }
+
+        // Tastatur- & Touch-Steuerung
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') keys.left = true;
-            if (e.key === 'ArrowRight') keys.right = true;
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+            if (e.key === 'Escape' && gameActive) stopMiniGame();
         });
         window.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft') keys.left = false;
-            if (e.key === 'ArrowRight') keys.right = false;
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
         });
 
-        // Touch Controls
+        // Touch-Buttons Steuerung
         btnMoveLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.left = true; });
         btnMoveLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys.left = false; });
         btnMoveRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.right = true; });
@@ -505,7 +562,10 @@
         btnMoveRight.addEventListener('mousedown', () => keys.right = true);
         btnMoveRight.addEventListener('mouseup', () => keys.right = false);
 
-        // --- TERMINAL UTILITIES ---
+        cyberEyeBtn.addEventListener('click', startMiniGame);
+        closeGameBtn.addEventListener('click', stopMiniGame);
+
+        // --- TERMINAL LOGIK ---
         function appendTerminal(text) {
             const div = document.createElement('div');
             div.textContent = text;
@@ -521,33 +581,23 @@
             appendTerminal(`$ ${cmd}`);
             terminalInput.value = '';
 
-            if (cmd === 'help') {
-                appendTerminal('> Befehle: play (Mini-Game), clear, status, about');
-            } else if (cmd === 'play') {
+            if (cmd === 'hilfe' || cmd === 'help') {
+                appendTerminal('> Befehle: spiel, leeren, status, info');
+            } else if (cmd === 'spiel' || cmd === 'play') {
                 startMiniGame();
-            } else if (cmd === 'clear') {
+            } else if (cmd === 'leeren' || cmd === 'clear') {
                 terminalOutput.innerHTML = '';
             } else if (cmd === 'status') {
                 appendTerminal('> STATUS: Arche Nova System 100% online.');
                 appendTerminal(`> LOKALE EINTRÄGE: ${getLogs().length}`);
-            } else if (cmd === 'about') {
+            } else if (cmd === 'info' || cmd === 'about') {
                 appendTerminal('> ARCHE NOVA: Autonomes Territorium gegen Algorithmen.');
             } else {
-                appendTerminal(`> Unbekannter Befehl: '${cmd}'. Tippe 'help'.`);
+                appendTerminal(`> Unbekannter Befehl: '${cmd}'. Tippe 'hilfe'.`);
             }
         });
 
-        cyberEyeBtn.addEventListener('click', () => {
-            if (!gameActive) {
-                startMiniGame();
-            } else {
-                stopMiniGame();
-            }
-        });
-
-        closeGameBtn.addEventListener('click', stopMiniGame);
-
-        // --- LOCAL STORAGE LOG SYSTEM ---
+        // --- LOKALER SPEICHER / LOG-SYSTEM ---
         function getLogs() {
             try {
                 const data = localStorage.getItem(STORAGE_KEY);
@@ -614,7 +664,7 @@
             );
         }
 
-        // --- LOCAL MEDIA FILE READER (BASE64) ---
+        // --- LOKALER MEDIEN-READER (BASE64) ---
         mediaFileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -694,10 +744,15 @@
             }, 3000);
         }
 
+        window.addEventListener('resize', () => {
+            resizeStarCanvas();
+            if (gameActive) resizeGameCanvas();
+        });
+
         window.onload = function () {
-            resizeCanvas();
+            resizeStarCanvas();
             initStars();
-            animate();
+            animateBackground();
             renderLogs();
         };
     </script>
