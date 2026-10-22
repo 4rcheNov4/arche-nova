@@ -44,14 +44,26 @@
             z-index: 1;
         }
 
-        /* Cyberpunk Glas-Panels */
+        /* Pulsierende, interaktive Cyberpunk Glas-Panels */
         .panel {
-            background: rgba(10, 15, 20, 0.75);
-            border: 1px solid rgba(0, 255, 204, 0.3);
+            background: rgba(10, 15, 25, 0.85);
+            border: 2px solid #00ffcc;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
-            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.05);
+            backdrop-filter: blur(10px);
+            animation: neonGlow 4s infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            0% {
+                border-color: rgba(0, 255, 204, 0.6);
+                box-shadow: 0 0 15px rgba(0, 255, 204, 0.3), inset 0 0 10px rgba(0, 255, 204, 0.1);
+            }
+            100% {
+                border-color: rgba(255, 0, 204, 0.6);
+                box-shadow: 0 0 20px rgba(255, 0, 204, 0.3), inset 0 0 10px rgba(255, 0, 204, 0.1);
+            }
         }
 
         h1, h2 {
@@ -60,13 +72,13 @@
             text-transform: uppercase;
             margin-bottom: 12px;
             color: #00ffcc;
-            text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
         }
 
         /* Terminal & Konsole */
         .terminal-output {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 255, 204, 0.2);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 255, 204, 0.4);
             border-radius: 6px;
             padding: 10px;
             height: 120px;
@@ -83,8 +95,8 @@
 
         input[type="text"], textarea {
             width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 204, 0.4);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 204, 0.5);
             border-radius: 6px;
             color: #00ffcc;
             padding: 10px;
@@ -94,12 +106,12 @@
         }
 
         input[type="text"]:focus, textarea:focus {
-            border-color: #00ffcc;
-            box-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+            border-color: #ff00cc;
+            box-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
         }
 
         button {
-            background: rgba(0, 255, 204, 0.1);
+            background: rgba(0, 255, 204, 0.15);
             border: 1px solid #00ffcc;
             color: #00ffcc;
             padding: 10px 16px;
@@ -114,10 +126,9 @@
         button:hover {
             background: #00ffcc;
             color: #030305;
-            box-shadow: 0 0 12px #00ffcc;
+            box-shadow: 0 0 15px #00ffcc;
         }
 
-        /* Schnellstart-Buttons */
         .btn-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -136,7 +147,6 @@
             margin-top: 15px;
         }
 
-        /* Custom Cyberpunk Scrollbar */
         #chronik-feed::-webkit-scrollbar, .terminal-output::-webkit-scrollbar {
             width: 6px;
         }
@@ -145,15 +155,15 @@
             border-radius: 3px;
         }
         #chronik-feed::-webkit-scrollbar-thumb, .terminal-output::-webkit-scrollbar-thumb {
-            background: #00ffcc;
+            background: #ff00cc;
             border-radius: 3px;
-            box-shadow: 0 0 6px #00ffcc;
+            box-shadow: 0 0 6px #ff00cc;
         }
 
         .tresor-karte {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 255, 204, 0.2);
-            border-left: 3px solid #00ffcc;
+            background: rgba(5, 10, 15, 0.6);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-left: 4px solid #00ffcc;
             border-radius: 6px;
             padding: 12px;
             position: relative;
@@ -181,7 +191,6 @@
         }
         .delete-btn:hover {
             color: #ff0000;
-            box-shadow: none;
             background: rgba(255,0,0,0.1);
         }
 
@@ -213,14 +222,25 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         #game-canvas {
             border: 2px solid #00ffcc;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
             background: #000;
             max-width: 100%;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            width: 360px;
+            max-width: 100%;
+            font-size: 1rem;
+            color: #ff00cc;
+            text-shadow: 0 0 8px #ff00cc;
+            padding: 0 5px;
         }
 
         .game-controls {
@@ -244,11 +264,6 @@
             width: 360px;
             max-width: 100%;
         }
-        .close-game:hover {
-            background: #ff0000;
-            box-shadow: 0 0 12px #ff0000;
-            color: #fff;
-        }
 
         .cyber-eye {
             text-align: center;
@@ -261,7 +276,6 @@
 </head>
 <body>
 
-    <!-- Dynamischer Canvas-Sternenhimmel -->
     <canvas id="starfield"></canvas>
 
     <div class="container">
@@ -313,9 +327,13 @@
 
     </div>
 
-    <!-- Cyber-Balloon Modal mit Steuerungs-Buttons -->
+    <!-- Cyber-Balloon Modal -->
     <div id="game-modal">
-        <canvas id="game-canvas" width="360" height="400"></canvas>
+        <div class="score-board">
+            <span>SCORE: <b id="current-score">0</b></span>
+            <span>HIGH: <b id="high-score">0</b></span>
+        </div>
+        <canvas id="game-canvas" width="360" height="380"></canvas>
         <div class="game-controls">
             <button onclick="movePlayer(-25)">◀ LINKS</button>
             <button onclick="movePlayer(25)">RECHTS ▶</button>
@@ -335,11 +353,11 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const stars = Array.from({ length: 70 }, () => ({
+        const stars = Array.from({ length: 80 }, () => ({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 1.5,
-            speed: Math.random() * 0.3 + 0.1
+            size: Math.random() * 1.8,
+            speed: Math.random() * 0.4 + 0.1
         }));
 
         function animateStars() {
@@ -470,7 +488,6 @@
             renderChronik();
         }
 
-        /* --- BACKUP & RESTORE FUNKTIONEN --- */
         function exportTresor() {
             const data = localStorage.getItem('arche_nova_chronik');
             if (!data || JSON.parse(data).length === 0) {
@@ -510,21 +527,27 @@
 
         document.addEventListener('DOMContentLoaded', renderChronik);
 
-        /* --- 4. CYBER-BALLOON MINISPIEL --- */
+        /* --- 4. ADVANCED CYBER-BALLOON MINISPIEL (Punkte & Münzen) --- */
         let gameInterval = null;
         const modal = document.getElementById('game-modal');
         const gCanvas = document.getElementById('game-canvas');
         const gCtx = gCanvas.getContext('2d');
         
-        let balloon = { x: 180, y: 340, radius: 18, speed: 2 };
-        let obstacles = [];
+        let balloon = { x: 180, y: 320, radius: 16 };
+        let items = []; // Rote Hindernisse & Gelbe Münzen
+        let score = 0;
+        let highScore = localStorage.getItem('arche_nova_highscore') || 0;
 
         function startCyberBalloonGame() {
             modal.style.display = 'flex';
             balloon.x = gCanvas.width / 2;
             balloon.y = gCanvas.height - 40;
-            obstacles = [];
+            items = [];
+            score = 0;
             
+            document.getElementById('current-score').innerText = score;
+            document.getElementById('high-score').innerText = highScore;
+
             if (gameInterval) clearInterval(gameInterval);
             gameInterval = setInterval(updateGame, 1000 / 60);
         }
@@ -538,49 +561,78 @@
             balloon.x = Math.max(20, Math.min(gCanvas.width - 20, balloon.x + offset));
         }
 
-        // Auch direkte Klicks aufs Canvas behalten
         gCanvas.addEventListener('click', (e) => {
             const rect = gCanvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
-            if (clickX < gCanvas.width / 2) {
-                movePlayer(-30);
-            } else {
-                movePlayer(30);
-            }
+            if (clickX < gCanvas.width / 2) movePlayer(-30);
+            else movePlayer(30);
         });
 
         function updateGame() {
             gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
 
-            if (Math.random() < 0.03) {
-                obstacles.push({
+            // Neue Objekte erzeugen
+            if (Math.random() < 0.04) {
+                const isCoin = Math.random() < 0.4; // 40% Chance auf gelbe Münze
+                items.push({
                     x: Math.random() * (gCanvas.width - 40) + 20,
                     y: 0,
-                    radius: 12,
-                    speed: Math.random() * 2 + 1.5
+                    radius: isCoin ? 10 : 13,
+                    speed: Math.random() * 2 + 1.8,
+                    type: isCoin ? 'coin' : 'obstacle'
                 });
             }
 
-            gCtx.fillStyle = '#ff4444';
-            obstacles.forEach((obs, index) => {
-                obs.y += obs.speed;
-                gCtx.beginPath();
-                gCtx.arc(obs.x, obs.y, obs.radius, 0, Math.PI * 2);
-                gCtx.fill();
+            // Objekte bewegen & kollidieren
+            items.forEach((item, index) => {
+                item.y += item.speed;
 
-                let dist = Math.hypot(balloon.x - obs.x, balloon.y - obs.y);
-                if (dist < balloon.radius + obs.radius) {
-                    stopCyberBalloonGame();
-                    alert('CRASH! Datenstrom kollidiert.');
+                // Zeichnen
+                gCtx.beginPath();
+                gCtx.arc(item.x, item.y, item.radius, 0, Math.PI * 2);
+                if (item.type === 'coin') {
+                    gCtx.fillStyle = '#ffcc00'; // Gelbe Energie-Münze
+                    gCtx.shadowBlur = 10;
+                    gCtx.shadowColor = '#ffcc00';
+                } else {
+                    gCtx.fillStyle = '#ff4444'; // Roter Asteroid
+                    gCtx.shadowBlur = 8;
+                    gCtx.shadowColor = '#ff4444';
+                }
+                gCtx.fill();
+                gCtx.shadowBlur = 0; // Reset
+
+                // Kollision prüfen
+                let dist = Math.hypot(balloon.x - item.x, balloon.y - item.y);
+                if (dist < balloon.radius + item.radius) {
+                    if (item.type === 'coin') {
+                        // Münze eingesammelt!
+                        score += 100;
+                        document.getElementById('current-score').innerText = score;
+                        if (score > highScore) {
+                            highScore = score;
+                            localStorage.setItem('arche_nova_highscore', highScore);
+                            document.getElementById('high-score').innerText = highScore;
+                        }
+                        items.splice(index, 1);
+                    } else {
+                        // Roter Asteroid getroffen - CRASH!
+                        stopCyberBalloonGame();
+                        alert(`GAME OVER! Finaler Score: ${score} Punkte.`);
+                    }
                 }
 
-                if (obs.y > gCanvas.height) obstacles.splice(index, 1);
+                if (item.y > gCanvas.height) items.splice(index, 1);
             });
 
-            gCtx.fillStyle = '#00ffcc';
+            // Spieler (Cyber-Balloon)
             gCtx.beginPath();
             gCtx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);
+            gCtx.fillStyle = '#00ffcc';
+            gCtx.shadowBlur = 12;
+            gCtx.shadowColor = '#00ffcc';
             gCtx.fill();
+            gCtx.shadowBlur = 0;
         }
     </script>
 </body>
